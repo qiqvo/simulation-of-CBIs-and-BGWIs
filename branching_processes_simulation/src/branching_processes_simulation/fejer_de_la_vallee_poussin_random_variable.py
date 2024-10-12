@@ -3,7 +3,7 @@ from typing import Callable
 import numpy as np
 import scipy as sc
 
-from random_variable import RandomVariable
+from branching_processes_simulation.random_variable import RandomVariable
 
 # Fejer-de la Vallee Poussin
 class FejerDeLaValleePoussinRandomVariable(RandomVariable):

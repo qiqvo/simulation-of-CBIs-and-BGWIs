@@ -3,7 +3,7 @@ from typing import Callable
 import numpy as np
 from scipy.stats import bernoulli
 
-from immigration_rv import ImmigrationRandomVariable, RandomVariable
+from branching_processes_simulation.immigration_rv import ImmigrationRandomVariable, RandomVariable
 
 
 class ReproductionRandomVariable(RandomVariable):

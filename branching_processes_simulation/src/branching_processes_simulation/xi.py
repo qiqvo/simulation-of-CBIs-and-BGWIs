@@ -1,15 +1,15 @@
-from abc import ABC, abstractmethod
-from typing import Callable
 import numpy as np
-from scipy.stats import betaprime
 
-from random_variable import RandomVariable
+from branching_processes_simulation.fejer_de_la_vallee_poussin_random_variable import FejerDeLaValleePoussinRandomVariable
+from branching_processes_simulation.polya_transformed_xi import PolyaTransformedXi
+from branching_processes_simulation.random_variable import RandomVariable
 
 
-class PolyaTransformedXi(RandomVariable):
+class Xi(RandomVariable):
     def __init__(self, alpha: float) -> None:
         self.alpha = alpha
-        self._x = betaprime(1 + 1/self.alpha, 1)
+        self._fvp = FejerDeLaValleePoussinRandomVariable()
+        self._pxi = PolyaTransformedXi(alpha)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return 1 - np.power(np.power(np.abs(t), self.alpha) / (1 + np.power(np.abs(t), self.alpha)),1/self.alpha)
@@ -18,11 +18,10 @@ class PolyaTransformedXi(RandomVariable):
         return np.real(self.characteristic_function(t))
 
     def pdf(self, x: np.float64) -> np.float64:
-        xa = x**self.alpha
-        return (1 + self.alpha) * xa / (1 + xa)**(2 + 1/self.alpha)
+        return None
 
     def cdf(self, x: np.float64) -> np.float64:
-        return x**(1 + self.alpha)/(1 + x**self.alpha)**((1 + self.alpha)/self.alpha)
+        return None
 
     #TODO: check
     def mean(self) -> np.float64:
@@ -33,6 +32,5 @@ class PolyaTransformedXi(RandomVariable):
         return np.infty
 
     def sample(self, N: int) -> np.ndarray[float]:
-        x = self._x.rvs(N)
-        x = np.power(x, 1/self.alpha)
-        return x
+        s = np.abs(self._fvp.sample(N)) / self._pxi.sample(N)
+        return s

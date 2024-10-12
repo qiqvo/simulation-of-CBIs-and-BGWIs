@@ -1,8 +1,8 @@
 import numpy as np
 
-from cb import CB
-from linnik import Linnik
-from random_process import RandomProcess
+from branching_processes_simulation.cb import CB
+from branching_processes_simulation.linnik import Linnik
+from branching_processes_simulation.random_process import RandomProcess
 
 
 class CBI(RandomProcess):

@@ -1,7 +1,7 @@
 from typing import Callable
 import numpy as np
 
-from random_variable import RandomVariable
+from branching_processes_simulation.random_variable import RandomVariable
 
 
 class ImmigrationRandomVariable(RandomVariable):

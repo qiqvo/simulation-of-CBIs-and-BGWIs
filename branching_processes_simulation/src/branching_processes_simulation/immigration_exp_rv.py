@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.stats import poisson
 
-from immigration_rv import ImmigrationRandomVariable
-from stable_random_variable import StableRandomVariable
+from branching_processes_simulation.immigration_rv import ImmigrationRandomVariable
+from branching_processes_simulation.stable_random_variable import StableRandomVariable
 
 
 class ImmigrationExpRandomVariable(ImmigrationRandomVariable):

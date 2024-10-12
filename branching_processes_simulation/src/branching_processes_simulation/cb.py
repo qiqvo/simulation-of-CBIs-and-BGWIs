@@ -2,8 +2,8 @@ import typing
 import numpy as np
 from scipy.stats import poisson
 
-from random_process import RandomProcess
-from xi import Xi
+from branching_processes_simulation.random_process import RandomProcess
+from branching_processes_simulation.xi import Xi
 
 
 class CB(RandomProcess):

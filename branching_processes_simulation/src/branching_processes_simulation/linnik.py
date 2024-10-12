@@ -4,8 +4,8 @@ from typing import Any, Callable
 import numpy as np
 from scipy.stats import gengamma
 
-from random_variable import RandomVariable
-from stable_random_variable import StableRandomVariable
+from branching_processes_simulation.random_variable import RandomVariable
+from branching_processes_simulation.stable_random_variable import StableRandomVariable
 
 
 class Linnik(RandomVariable):

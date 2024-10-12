@@ -4,7 +4,7 @@ from typing import Any, Callable
 import numpy as np
 import scipy as sc
 
-from random_variable import RandomVariable
+from branching_processes_simulation.random_variable import RandomVariable
 
 
 class StableRandomVariable(RandomVariable):

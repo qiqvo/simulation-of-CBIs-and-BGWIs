@@ -1,6 +1,6 @@
 
-from immigration_const_rv import ImmigrationConstRandomVariable
-from reproduction_rv import ReproductionRandomVariable
+from branching_processes_simulation.immigration_const_rv import ImmigrationConstRandomVariable
+from branching_processes_simulation.reproduction_rv import ReproductionRandomVariable
 
 
 class ReproductionConstRandomVariable(ReproductionRandomVariable):

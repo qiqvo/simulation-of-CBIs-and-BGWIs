@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.stats import bernoulli, binom
 
-from immigration_rv import ImmigrationRandomVariable
+from branching_processes_simulation.immigration_rv import ImmigrationRandomVariable
 
 
 class ImmigrationConstRandomVariable(ImmigrationRandomVariable):
