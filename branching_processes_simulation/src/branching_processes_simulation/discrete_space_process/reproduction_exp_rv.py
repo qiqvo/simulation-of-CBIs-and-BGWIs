@@ -1,6 +1,6 @@
 
-from branching_processes_simulation.immigration_exp_rv import ImmigrationExpRandomVariable
-from branching_processes_simulation.reproduction_rv import ReproductionRandomVariable
+from branching_processes_simulation.discrete_space_process.immigration_exp_rv import ImmigrationExpRandomVariable
+from branching_processes_simulation.discrete_space_process.reproduction_rv import ReproductionRandomVariable
 
 
 class ReproductionExpRandomVariable(ReproductionRandomVariable):

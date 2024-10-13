@@ -3,14 +3,14 @@ import numpy as np
 from scipy.stats import poisson
 
 from branching_processes_simulation.random_process import RandomProcess
-from branching_processes_simulation.xi import Xi
+from branching_processes_simulation.continuous_space_process.tau import Tau
 
 
 class CB(RandomProcess):
     def __init__(self, alpha: np.float64, c: np.float64) -> None:
         self.alpha = alpha
         self.c = c
-        self._xi = Xi(alpha)
+        self._xi = Tau(alpha)
 
     def characteristic_function(self, t: np.complex64, time: np.float64, z: np.float64) -> np.complex64:
         return self.laplace_transform(-1j * t, time, z)

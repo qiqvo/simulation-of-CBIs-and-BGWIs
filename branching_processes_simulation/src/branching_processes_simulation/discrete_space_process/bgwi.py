@@ -3,20 +3,17 @@ import numpy as np
 from scipy.stats import poisson
 
 from branching_processes_simulation.random_process import RandomProcess
-from branching_processes_simulation.reproduction_rv import ReproductionRandomVariable
-from branching_processes_simulation.xi import Xi
+from branching_processes_simulation.discrete_space_process.reproduction_rv import ReproductionRandomVariable
+from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable
 
 
-class BGW(RandomProcess):
-    def __init__(self, reproduction: ReproductionRandomVariable) -> None:
+class BGWI(RandomProcess):
+    def __init__(self, reproduction: ReproductionRandomVariable, immigration: ImmigrationRandomVariable) -> None:
         self._reproduction = reproduction
+        self._immigration = immigration
 
     def generating_function(self, s: np.complex64, time: int, z: int) -> np.complex64:
-        g = s
-        for i in range(time):
-            g = self._reproduction.generating_function(g)
-        g = g ** z
-        return g
+        return None
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return self.generating_function(np.exp(1j * t))

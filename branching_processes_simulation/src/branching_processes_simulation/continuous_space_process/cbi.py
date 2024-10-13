@@ -1,6 +1,6 @@
 import numpy as np
 
-from branching_processes_simulation.cb import CB
+from branching_processes_simulation.continuous_space_process.cb import CB
 from branching_processes_simulation.linnik import Linnik
 from branching_processes_simulation.random_process import RandomProcess
 

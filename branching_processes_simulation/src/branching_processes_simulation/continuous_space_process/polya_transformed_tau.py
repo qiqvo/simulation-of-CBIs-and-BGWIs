@@ -1,12 +1,10 @@
-from abc import ABC, abstractmethod
-from typing import Callable
 import numpy as np
 from scipy.stats import betaprime
 
 from branching_processes_simulation.random_variable import RandomVariable
 
 
-class PolyaTransformedXi(RandomVariable):
+class PolyaTransformedTau(RandomVariable):
     def __init__(self, alpha: float) -> None:
         self.alpha = alpha
         self._x = betaprime(1 + 1/self.alpha, 1)

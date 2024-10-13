@@ -1,9 +1,7 @@
-from abc import ABC, abstractmethod
-from typing import Callable
 import numpy as np
 from scipy.stats import bernoulli
 
-from branching_processes_simulation.immigration_rv import ImmigrationRandomVariable, RandomVariable
+from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable, RandomVariable
 
 
 class ReproductionRandomVariable(RandomVariable):

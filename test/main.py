@@ -2,12 +2,12 @@ from matplotlib import pyplot as plt
 import numpy as np
 import time
 
-from fejer_de_la_vallee_poussin_random_variable import FejerDeLaValleePoussinRandomVariable
-from immigration_const_rv import ImmigrationConstRandomVariable
-from linnik import Linnik
-from reproduction_const_rv import ReproductionConstRandomVariable
-from stable_random_variable import StableRandomVariable
-from xi import Xi
+from branching_processes_simulation.fejer_de_la_vallee_poussin_random_variable import FejerDeLaValleePoussinRandomVariable
+from branching_processes_simulation.immigration_const_rv import ImmigrationConstRandomVariable
+from branching_processes_simulation.linnik import Linnik
+from branching_processes_simulation.reproduction_const_rv import ReproductionConstRandomVariable
+from branching_processes_simulation.stable_random_variable import StableRandomVariable
+from branching_processes_simulation.xi import Xi
 
 
 def main():
