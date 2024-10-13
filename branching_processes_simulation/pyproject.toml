@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "branching_processes_simulation_package"
-version = "0.0.2"
+version = "0.0.3"
 authors = [
   { name="Ben Povar", email="ben.povar@gmail.com" },
 ]
-description = "A small example package"
+description = "Simulation of random variables related to branching processes."
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
@@ -16,7 +16,13 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+  "matplotlib",
+  "numpy", 
+  "typing",
+  "scipy"
+]
 
 [project.urls]
-Homepage = "https://github.com/pypa/sampleproject"
-Issues = "https://github.com/pypa/sampleproject/issues"
+Homepage = "https://github.com/qiqvo/simulation-of-CBIs-and-BGWIs"
+Issues = "https://github.com/qiqvo/simulation-of-CBIs-and-BGWIs/issues"
