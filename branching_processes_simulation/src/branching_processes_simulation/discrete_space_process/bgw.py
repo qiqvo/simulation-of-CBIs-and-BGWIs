@@ -34,12 +34,18 @@ class BGW(RandomProcess):
         else: 
             return time * self._reproduction.variance()
     
+    def sample_profile(self, time: int, z: int) -> np.ndarray[int]:
+        profile = np.zeros(time, int)
+        profile[0] = z
+        for i in range(1, time):
+            profile[i] = np.sum(self._reproduction.sample(profile[i - 1]))
+            if profile[i] == 0:
+                break
+        return profile
+
     def sample(self, N: int, time: int, z: int) -> np.ndarray[float]:
-        k = (self.alpha * self.c * time)**(1 / self.alpha)
-        s = poisson.rvs(z / k, size=N)
-        for i in range(N):
-            s[i] = self._xi.sample(s[i]) * k
-        return s
+        # self.
+        return None
     
     # TODO: implement other methods? 
     def sample_function(self, N: int, theta: typing.Callable, time: int, z: int) -> np.ndarray[float]:
