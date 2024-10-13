@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.stats import poisson
 
 from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable
 from branching_processes_simulation.stable_random_variable import StableRandomVariable
@@ -17,5 +16,5 @@ class ImmigrationExpRandomVariable(ImmigrationRandomVariable):
 
     def sample(self, N: int) -> np.ndarray[float]:
         s = self._s.sample(N)
-        s = poisson.rvs(s)
+        s = self.rng.poisson(s)
         return s

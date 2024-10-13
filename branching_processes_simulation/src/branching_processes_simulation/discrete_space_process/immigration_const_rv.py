@@ -7,18 +7,15 @@ from branching_processes_simulation.discrete_space_process.immigration_rv import
 class ImmigrationConstRandomVariable(ImmigrationRandomVariable):
     def __init__(self, alpha, d) -> None:
         super().__init__(alpha, d, lambda x: 1)
-        self._b = bernoulli(self.d)
 
     def sample(self, N: int) -> np.ndarray[float]:
-        # s = self._b.rvs(N)
-
         s = np.zeros(N)
 
         counter = 1
-        k = binom.rvs(N, self.d)
+        k = self.rng.binom.rvs(N, self.d)
         s[:k] = counter
         while k > 0:
-            k = binom.rvs(k, 1 - self.alpha / counter)
+            k = self.rng.binom.rvs(k, 1 - self.alpha / counter)
             s[:k] += 1
             counter += 1
         np.random.shuffle(s)

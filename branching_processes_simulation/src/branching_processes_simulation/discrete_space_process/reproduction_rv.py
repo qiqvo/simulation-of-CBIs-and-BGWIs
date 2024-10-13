@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.stats import bernoulli
 
 from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable, RandomVariable
 
@@ -53,5 +52,5 @@ class ReproductionRandomVariable(RandomVariable):
         if self._immigration is None:
             self._immigration = self._create_immigration()
         s = self._immigration.sample(N) + 1
-        s = bernoulli.rvs(1 / s) * s
+        s = self.rng.binomial(1, 1 / s) * s
         return s

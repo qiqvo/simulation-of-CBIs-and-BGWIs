@@ -6,14 +6,14 @@ from branching_processes_simulation.stable_random_variable import StableRandomVa
 
 
 class Linnik(RandomVariable):
-    def __init__(self, alpha: float, delta: float) -> None:
+    def __init__(self, alpha: float, beta: float) -> None:
         self.alpha = alpha
-        self.delta = delta
-        self._v = gengamma(self.delta, 1 / self.delta)
+        self.beta = beta
+        # self._v = gengamma(self.delta, 1 / self.delta)
         self._s = StableRandomVariable(self.alpha)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
-        return 1 / np.power((1 + np.power(np.abs(t), self.alpha)),self.delta)
+        return 1 / np.power((1 + np.power(np.abs(t), self.alpha)), self.beta)
 
     def laplace_transform(self, t: np.float64) -> np.float64:
         return np.real(self.characteristic_function(t))
@@ -33,7 +33,7 @@ class Linnik(RandomVariable):
         return np.infty
 
     def sample(self, N: int) -> np.ndarray[float]:
-        v = self._v.rvs(N)
+        v = self.rng.gamma(self.beta, 1, N)
         s = self._s.sample(N)
-        return np.power(v, 1 / (self.alpha * self.delta)) * s
+        return np.power(v, 1/self.alpha) * s
     

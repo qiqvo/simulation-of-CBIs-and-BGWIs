@@ -2,8 +2,10 @@ from abc import ABC, abstractmethod
 from typing import Callable
 import numpy as np
 
+from branching_processes_simulation.i_random import IRandom
 
-class RandomProcess(ABC):
+
+class RandomProcess(IRandom):
     def __init__(self) -> None:
         pass
 

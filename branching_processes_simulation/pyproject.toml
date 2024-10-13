@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "branching_processes_simulation_package"
-version = "0.0.4"
+version = "0.1.0"
 authors = [
   { name="Ben Povar", email="ben.povar@gmail.com" },
 ]

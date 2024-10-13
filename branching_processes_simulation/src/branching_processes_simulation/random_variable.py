@@ -3,8 +3,10 @@ from typing import Callable
 import numpy as np
 from scipy import optimize
 
+from branching_processes_simulation.i_random import IRandom
 
-class RandomVariable(ABC):
+
+class RandomVariable(IRandom):
     _interval_a = 0
     _interval_b = 1e10 
 

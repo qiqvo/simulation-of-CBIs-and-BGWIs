@@ -6,8 +6,9 @@ from branching_processes_simulation.random_variable import RandomVariable
 
 class StableRandomVariable(RandomVariable):
     # alpha < 1
-    def __init__(self, alpha: float) -> None:
+    def __init__(self, alpha: float, d: float=1) -> None:
         self.alpha = alpha
+        self.d = d
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return np.exp(- self.d * np.power(t, self.alpha))
@@ -35,8 +36,9 @@ class StableRandomVariable(RandomVariable):
         return np.sin((1 - self.alpha) * theta) * c2 / np.power(np.sin(theta), 1/(1 - self.alpha))
 
     def sample(self, N: int) -> np.ndarray[float]:
-        theta = np.random.uniform(0, 1, N)
-        w = -np.log(np.random.uniform(0, 1, N))
+        # TODO: check the scaling
+        theta = self.rng.uniform(0, 1, N)
+        w = -np.log(self.rng.uniform(0, 1, N))
         return np.power(self._a(theta) / w, (1 - self.alpha) / self.alpha)
     
     def sample_function(self, N: int, theta: Callable[..., Any]) -> np.ndarray[float]:
