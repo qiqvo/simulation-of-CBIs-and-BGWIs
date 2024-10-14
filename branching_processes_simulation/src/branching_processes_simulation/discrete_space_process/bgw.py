@@ -4,6 +4,7 @@ from scipy.stats import poisson
 
 from branching_processes_simulation.random_process import RandomProcess
 from branching_processes_simulation.discrete_space_process.reproduction_rv import ReproductionRandomVariable
+from branching_processes_simulation.discrete_space_process.genealogy.node import Node
 
 
 class BGW(RandomProcess):
@@ -42,6 +43,31 @@ class BGW(RandomProcess):
             if profile[i] == 0:
                 break
         return profile
+    
+    def sample_profile_from_genealogy(self, time: int, root: Node) -> np.ndarray[int]:
+        profile = np.zeros(time, int)
+        profile[0] = len(root.children)
+        for e in root.children:
+            profile[1] += self.count_layer(1, time, e, profile)
+        return profile
+        
+    def count_layer(self, i: int, time: int, e: Node, profile: np.ndarray[int]) -> int:
+        for child in e.children:
+            profile[i + 1] += self.count_layer(i+1, time, child, profile)
+        return len(e.children)
+
+    def sample_genealogy(self, time: int, z: int) -> Node:
+        root = Node()
+        root.create_offspring(z)
+        for e in root.children:
+            self.create_layer(time-1, e)
+        return root
+    
+    def create_layer(self, time: int, e: Node):
+        offspring = self._reproduction.sample(1)[0]
+        e.create_offspring(offspring)
+        for new_e in e.children:
+            self.create_layer(time - 1, new_e)
 
     def sample(self, N: int, time: int, z: int) -> np.ndarray[float]:
         # self.
