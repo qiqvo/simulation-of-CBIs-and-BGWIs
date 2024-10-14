@@ -9,11 +9,13 @@ from branching_processes_simulation.discrete_space_process.immigration_rv import
 from branching_processes_simulation.discrete_space_process.bgw import BGW
 
 
-class BGWI(RandomProcess):
+class BGWI(BGW):
     def __init__(self, reproduction: ReproductionRandomVariable, immigration: ImmigrationRandomVariable) -> None:
-        self._reproduction = reproduction
+        super().__init__(reproduction)
         self._immigration = immigration
-        self._bgw = BGW(reproduction)
+
+    def get_immigration_sample(self, N: int):
+        return self._immigration.sample(N)
 
     def generating_function(self, s: np.complex64, time: int, z: int) -> np.complex64:
         return None
@@ -36,10 +38,10 @@ class BGWI(RandomProcess):
     
     def sample_profile(self, time: int, z: int) -> np.ndarray[int]:
         profile = np.zeros((time, time), int)
-        immigrants = self._immigration.sample(time)
-        profile[0, :] = self._bgw.sample_profile(time, z + immigrants[0])
+        immigrants = self.get_immigration_sample(time)
+        profile[0, :] = super().sample_profile(time, z + immigrants[0])
         for i in range(1, time):
-            profile[i, i:] = self._bgw.sample_profile(time-i, immigrants[i])
+            profile[i, i:] = super().sample_profile(time-i, immigrants[i])
         return profile
 
     def sample_profile_from_genealogy(self, time: int, root: Node) -> np.ndarray[int]:
@@ -54,26 +56,6 @@ class BGWI(RandomProcess):
         for child in e.children:
             profile[i + 1] += self.count_layer(i+1, time, child, profile)
         return len(e.children)
-
-    def sample_genealogy(self, time: int, z: int) -> Node:
-        root = Node()
-        immigrant = self._immigration.sample(1)[0]
-        root.create_offspring(z + immigrant)
-        for e in root.children:
-            self._bgw.create_layer(time-1, e)
-        # Infinite stem particle:
-        root.create_offspring(1)
-        self.create_layer(time - 1, root.children[-1])
-        return root
-    
-    def create_layer(self, time: int, e: Node):
-        immigrant = self._immigration.sample(1)[0]
-        e.create_offspring(immigrant)
-        for new_e in e.children:
-            self._bgw.create_layer(time-1, new_e)
-            # self.create_layer(time - 1, new_e)
-        e.create_offspring(1)
-        self.create_layer(time - 1, e.children[-1])
 
     def sample(self, N: int, time: int, z: int) -> np.ndarray[float]:
         return None

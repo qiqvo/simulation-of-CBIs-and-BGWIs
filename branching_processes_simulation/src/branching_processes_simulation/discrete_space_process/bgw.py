@@ -11,6 +11,9 @@ class BGW(RandomProcess):
     def __init__(self, reproduction: ReproductionRandomVariable) -> None:
         self._reproduction = reproduction
 
+    def get_reproduction_sample(self, N: int):
+        return self._reproduction.sample(N)
+
     def generating_function(self, s: np.complex64, time: int, z: int) -> np.complex64:
         g = s
         # iterations of f
@@ -39,7 +42,7 @@ class BGW(RandomProcess):
         profile = np.zeros(time, int)
         profile[0] = z
         for i in range(1, time):
-            profile[i] = np.sum(self._reproduction.sample(profile[i - 1]))
+            profile[i] = np.sum(self.get_reproduction_sample(profile[i - 1]))
             if profile[i] == 0:
                 break
         return profile
@@ -55,19 +58,6 @@ class BGW(RandomProcess):
         for child in e.children:
             profile[i + 1] += self.count_layer(i+1, time, child, profile)
         return len(e.children)
-
-    def sample_genealogy(self, time: int, z: int) -> Node:
-        root = Node()
-        root.create_offspring(z)
-        for e in root.children:
-            self.create_layer(time-1, e)
-        return root
-    
-    def create_layer(self, time: int, e: Node):
-        offspring = self._reproduction.sample(1)[0]
-        e.create_offspring(offspring)
-        for new_e in e.children:
-            self.create_layer(time - 1, new_e)
 
     def sample(self, N: int, time: int, z: int) -> np.ndarray[float]:
         # self.
