@@ -20,8 +20,8 @@ class LinnikLaplaceTransform():
             return self._der_f_map[k]
         
         j = k-1
-        while j not in self._der_f_map:
-            --j
+        while j not in self._der_f_map and j >= 0:
+            j -= 1
         
         der_f_k = diff(self._der_f_map[j], self._x, k - j)
         self._der_f_map[k] = der_f_k
