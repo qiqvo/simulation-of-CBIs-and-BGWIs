@@ -1,4 +1,5 @@
-matplotlib
-numpy
-typing
-scipy
+matplotlib>=3.9.2
+numpy>=2.1.2
+typing>=3.7
+scipy>=1.14
+sympy>=1.13
