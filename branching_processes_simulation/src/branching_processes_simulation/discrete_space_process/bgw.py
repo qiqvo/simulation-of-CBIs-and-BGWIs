@@ -1,6 +1,5 @@
 import typing
 import numpy as np
-from scipy.stats import poisson
 
 from branching_processes_simulation.random_process import RandomProcess
 from branching_processes_simulation.discrete_space_process.reproduction_rv import ReproductionRandomVariable
@@ -29,14 +28,15 @@ class BGW(RandomProcess):
         return np.real(self.generating_function(np.exp(-t)))
     
     def mean(self, t: np.float64, time: int, z: int) -> np.float64:
-        return z
+        return self._reproduction.mean()**time * z
 
-    # TODO: check:
     def variance(self, t: np.float64, time: int, z: int) -> np.float64:
-        if self.alpha < 1:
-            return np.infty
-        else: 
-            return time * self._reproduction.variance()
+        m = self._reproduction.mean()
+        if m == 1:
+            res = time
+        else:
+            res = m**(time -1) * (m**time - 1) / (m - 1)
+        return res * self._reproduction.variance() * z
     
     def sample_profile(self, time: int, z: int) -> np.ndarray[int]:
         profile = np.zeros(time, int)

@@ -1,9 +1,7 @@
 import typing
 import numpy as np
-from scipy.stats import poisson
 
 from branching_processes_simulation.discrete_space_process.genealogy.node import Node
-from branching_processes_simulation.random_process import RandomProcess
 from branching_processes_simulation.discrete_space_process.reproduction_rv import ReproductionRandomVariable
 from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable
 from branching_processes_simulation.discrete_space_process.bgw import BGW
@@ -27,14 +25,28 @@ class BGWI(BGW):
         return np.real(self.generating_function(np.exp(-t)))
     
     def mean(self, t: np.float64, time: int, z: int) -> np.float64:
-        return z
+        m = self._reproduction.mean()
+        if m == 1:
+            res = time 
+        else:
+            res = m * (m**time - 1) / (m - 1)
 
-    # TODO: check:
+        return res * self._immigration.mean() + m**time * z
+
     def variance(self, t: np.float64, time: int, z: int) -> np.float64:
-        if self.alpha < 1:
-            return np.infty
-        else: 
-            return time * self._reproduction.variance()
+        m = self._reproduction.mean()
+        v = self._reproduction.variance()
+        mj = self._immigration.mean()
+        vj = self._immigration.variance()
+
+        if m == 1:
+            res = time * vj + v*m* time * (time - 1) / 2 + time*v*z
+        else:
+            t = (m**(2*time) - 1) / (m**2 - 1)
+            res = vj*t + v*mj*(m**(time-1) (m**time - 1)/(m-1) - t) / (m-1)
+            res += m**(time -1) * (m**time - 1) / (m - 1) *v*z
+        
+        return res
     
     def sample_profile(self, time: int, z: int) -> np.ndarray[int]:
         profile = np.zeros((time, time), int)
