@@ -1,6 +1,7 @@
 import numpy as np
 from sympy import symbols, diff, Function
 
+from branching_processes_simulation.exponential import Exponential
 from branching_processes_simulation.random_variable import RandomVariable
 from branching_processes_simulation.stable_random_variable import StableRandomVariable
 
@@ -38,12 +39,17 @@ class LinnikLaplaceTransform():
 class Linnik(RandomVariable):
     def __init__(self, alpha: float, beta: float) -> None:
         assert 0 < alpha <= 1 and beta > 0
+        
+        if alpha == 1:
+            self = Exponential(1)
+            self.alpha = alpha
+        else:
+            self.alpha = alpha
+            self.beta = beta
+            # self._v = gengamma(self.delta, 1 / self.delta)
+            self._s = StableRandomVariable(self.alpha)
+            self._laplace_transform = LinnikLaplaceTransform(alpha, beta)
 
-        self.alpha = alpha
-        self.beta = beta
-        # self._v = gengamma(self.delta, 1 / self.delta)
-        self._s = StableRandomVariable(self.alpha)
-        self._laplace_transform = LinnikLaplaceTransform(alpha, beta)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return self._laplace_transform.get_kth_derivative_at_x(0, np.abs(t))
