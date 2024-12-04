@@ -7,6 +7,7 @@ from branching_processes_simulation.random_variable import RandomVariable
 class StableRandomVariable(RandomVariable):
     # alpha < 1
     def __init__(self, alpha: float, d: float=1) -> None:
+        assert 0 < alpha <= 1 and d > 0
         self.alpha = alpha
         self.d = d
 
@@ -17,14 +18,18 @@ class StableRandomVariable(RandomVariable):
         return np.real(self.characteristic_function(t))
 
     def pdf(self, x: np.float64) -> np.float64:
-        return None
+        return None # unknown
 
     def cdf(self, x: np.float64) -> np.float64:
-        return None
+        return None # unknown
 
     def mean(self) -> np.float64:
         if self.alpha < 1:
             return np.infty
+        elif self.alpha == 1:
+            return self.d
+        else:
+            return None 
 
     def variance(self) -> np.float64:
         if self.alpha < 1:
