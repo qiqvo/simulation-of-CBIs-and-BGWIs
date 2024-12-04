@@ -56,3 +56,6 @@ class RandomVariable(IRandom):
     def sample_function(self, N: int, theta: Callable) -> np.ndarray[float]:
         s = self.sample(N)
         return theta(s)
+    
+    def function_expectation(self, theta: Callable, N=100) -> np.ndarray[float]:
+        return self.sample_function(N, theta).mean()

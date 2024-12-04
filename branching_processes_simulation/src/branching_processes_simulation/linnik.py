@@ -37,18 +37,19 @@ class LinnikLaplaceTransform():
 
 
 class Linnik(RandomVariable):
+    def __new__(cls, alpha: float, *args, **kwargs):
+        if alpha == 1:
+            return Exponential(1)
+        return super().__new__(cls)
+    
     def __init__(self, alpha: float, beta: float) -> None:
         assert 0 < alpha <= 1 and beta > 0
-        
-        if alpha == 1:
-            self = Exponential(1)
-            self.alpha = alpha
-        else:
-            self.alpha = alpha
-            self.beta = beta
-            # self._v = gengamma(self.delta, 1 / self.delta)
-            self._s = StableRandomVariable(self.alpha)
-            self._laplace_transform = LinnikLaplaceTransform(alpha, beta)
+            
+        self.alpha = alpha
+        self.beta = beta
+        # self._v = gengamma(self.delta, 1 / self.delta)
+        self._s = StableRandomVariable(self.alpha)
+        self._laplace_transform = LinnikLaplaceTransform(alpha, beta)
 
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
