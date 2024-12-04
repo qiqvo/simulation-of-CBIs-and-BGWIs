@@ -24,7 +24,7 @@ class BGWI(BGW):
     def laplace_transform(self, t: np.float64) -> np.float64:
         return np.real(self.generating_function(np.exp(-t)))
     
-    def mean(self, t: np.float64, time: int, z: int) -> np.float64:
+    def mean(self, time: int, z: int) -> np.float64:
         m = self._reproduction.mean()
         if m == 1:
             res = time 
@@ -33,7 +33,7 @@ class BGWI(BGW):
 
         return res * self._immigration.mean() + m**time * z
 
-    def variance(self, t: np.float64, time: int, z: int) -> np.float64:
+    def variance(self, time: int, z: int) -> np.float64:
         m = self._reproduction.mean()
         v = self._reproduction.variance()
         mj = self._immigration.mean()
