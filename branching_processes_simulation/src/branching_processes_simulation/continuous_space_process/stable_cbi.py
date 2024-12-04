@@ -1,15 +1,21 @@
-from typing import Callable
 import numpy as np
 
-from branching_processes_simulation.continuous_space_process.cb import CB
-from branching_processes_simulation.random_process import RandomProcess
+from branching_processes_simulation.continuous_space_process.cbi import CBI
+from branching_processes_simulation.continuous_space_process.stable_cb import StableCB
+from branching_processes_simulation.linnik import Linnik
 
 
-class CBI(RandomProcess):
-    def __init__(self, reproduction_mechanism: Callable, immigration_mechanism: Callable) -> None:
-        self._immigration_mechanism = immigration_mechanism
-        self._reproduction_mechanism = reproduction_mechanism
-        self._cb = CB(self._reproduction_mechanism)
+class StableCBI(CBI):
+    def __init__(self, alpha: np.float64, c: np.float64, d: np.float64) -> None:
+        assert 0 < alpha <= 1 and d > 0 and c > 0
+        super().__init__(lambda t: c * t**(1 + alpha), lambda t: -d * t**(alpha))        
+
+        self.alpha = alpha
+        self.c = c
+        self.d = d
+        self.delta = d / (alpha * c)
+        self._cb = StableCB(alpha, c)
+        self._linnik = Linnik(self.alpha, self.delta)
 
     def characteristic_function(self, t: np.complex64, time: np.float64, z: np.float64) -> np.complex64:
         return self.laplace_transform(-1j * t, time, z)
