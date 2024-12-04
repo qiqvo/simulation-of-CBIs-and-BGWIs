@@ -16,5 +16,8 @@ def test():
 
     L = Linnik(alpha, delta)
     print(L.sample(1))
-    print(L.laplace_transform_kth_derivative(1, 1))
+    # print(L.laplace_transform_kth_derivative_at_x(1, 1))
+    print(L.laplace_transform_kth_derivative_at_x(4, 1))
     
+if __name__ == "__main__":
+    test()

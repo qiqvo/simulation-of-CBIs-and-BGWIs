@@ -8,7 +8,7 @@ from branching_processes_simulation.discrete_space_process.bgwi import BGWI
 from branching_processes_simulation.discrete_space_process.immigration_exp_rv import ImmigrationExpRandomVariable
 from branching_processes_simulation.discrete_space_process.reproduction_exp_rv import ReproductionExpRandomVariable
 
-def test():
+def dontrun():
     alpha = 0.4
     c = 0.4
     d = 0.2
@@ -25,15 +25,15 @@ def test():
     # print()
     # print(X.sample_profile(time, z))
 
-    genealogy = X.sample_genealogy(time, z)
+    # genealogy = X.sample_genealogy(time, z)
     # print(genealogy)
-    print()
-    for pre, _, node in RenderTree(genealogy):
-        print(f"{pre}node")
+    # print()
+    # for pre, _, node in RenderTree(genealogy):
+    #     print(f"{pre}node")
 
-    x_profile = X.sample_profile_from_genealogy(time, genealogy)
-    print()
-    print(x_profile)
+    # x_profile = X.sample_profile_from_genealogy(time, genealogy)
+    # print()
+    # print(x_profile)
 
 
     eta = ImmigrationExpRandomVariable(alpha, d)

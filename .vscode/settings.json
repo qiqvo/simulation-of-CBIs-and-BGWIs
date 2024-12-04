@@ -1,7 +1,6 @@
 {
     "python.testing.pytestArgs": [
-        // "branching_processes_simulation",
-        "branching_processes_simulation/src"
+        "branching_processes_simulation/tests"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,

@@ -63,5 +63,8 @@ class Linnik(RandomVariable):
         s = self._s.sample(N)
         return np.power(v, 1/self.alpha) * s
     
-    def laplace_transform_kth_derivative(self, k: int, t: np.float64) -> np.float64:
+    def laplace_transform_kth_derivative_at_x(self, k: int, t: np.float64) -> np.float64:
         return (-1)**k * self._laplace_transform.get_kth_derivative_at_x(k, t)
+
+    def laplace_transform_kth_derivative(self, k: int) -> Function:
+        return (-1)**k * self._laplace_transform.get_kth_derivative(k)
