@@ -43,7 +43,7 @@ class RandomVariable(IRandom):
     def variance(self) -> np.float64:
         return None
 
-    # TODO: finish: 
+    @abstractmethod
     def sample(self, N: int) -> np.ndarray[float]:
         # if self._table is None:
         #     self._table = {}
