@@ -34,7 +34,7 @@ class StableCB(CB):
         k = (self.alpha * self.c * time)**(1 / self.alpha)
         s = poisson.rvs(z / k, size=N)
         for i in range(N):
-            s[i] = self._xi.sample(s[i], **kwargs) * k
+            s[i] = np.sum(self._xi.sample(s[i], **kwargs)) * k
         return s
     
     def sample_function(self, N: int, time: float, theta: typing.Callable, z: np.float64) -> np.ndarray[float]:    

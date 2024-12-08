@@ -14,16 +14,13 @@ def dontrun():
     d = 0.2
     delta = d / (alpha * c)
 
-    # L = Linnik(alpha, delta)
-    # print(L.sample(1))
-
     xi = ReproductionExpRandomVariable(alpha, c)
     X = BGW(xi)
 
     time = 10
     z = 3
     # print()
-    # print(X.sample_profile(time, z))
+    print(X.sample_profile(time, z))
 
     # genealogy = X.sample_genealogy(time, z)
     # print(genealogy)

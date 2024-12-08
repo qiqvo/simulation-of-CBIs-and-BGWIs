@@ -47,20 +47,28 @@ class Tau(RandomVariable):
             s = np.abs(self._fvp.sample(N)) / self._pxi.sample(N)
         elif option == 'cdf':
             #TODO: cdf(x) = int_0^inf (1 - alpha / Gamma(1/alpha) x/u e^{-(x/u)^alpha}) p_alpha(u) du
-            s = []
-        elif option == 'size_biased':
-            s = self._linnik.sample(N)
-            for i in range(N):
-                h = self._ber(1/s[i], 1)
-                while h == 0:
-                    s[i] = self._linnik.sample(1)[0]
-                    h = self._ber(1/s[i], 1)
+            # s = []
+            raise NotImplementedError()
         return s
     
-    def function_expectation(self, theta: Callable, option='integrated_tail', N=100, **kwargs) -> np.ndarray[float]:
+    def function_expectation(self, theta: Callable, N=100, option='integrated_tail', **kwargs) -> np.ndarray[float]:
         if option == 'integrated_tail':
             delta = 0.001
             diff_theta = lambda x: (theta(x + delta) - theta(x)) / delta
-            return theta(0) + self._linnik_0.sample_function(N, diff_theta)
+            res = theta(np.array([0])) + self._linnik_0.sample_function(N, diff_theta, **kwargs).mean()
+        elif option == 'size_biased_ber':
+            s = self._linnik_1.sample(N)
+            for i in range(N):
+                h = self._ber(1/(s[i] + 1), 1)
+                while h == 0:
+                    s[i] = self._linnik_1.sample(1)[0]
+                    h = self._ber(1/(s[i] + 1), 1)
+                s[i] = theta(np.array([s[i]])) * (s[i] + 1) / s[i]
+            res = s.mean()
+        elif option == 'size_biased':
+            s = self._linnik_1.sample(N)
+            s = theta(s) / s
+            res = s.mean()
         else: 
-            return self.sample_function(N, theta).mean()
+            res = self.sample_function(N, theta).mean()
+        return res

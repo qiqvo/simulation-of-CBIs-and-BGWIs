@@ -44,18 +44,12 @@ class RandomVariable(IRandom):
         return None
 
     @abstractmethod
-    def sample(self, N: int) -> np.ndarray[float]:
-        # if self._table is None:
-        #     self._table = {}
-        #     step = 0.01
-
-        # u = np.random.uniform(0, 1, N)
-        # s = self.inverse_cdf()
+    def sample(self, N: int, **kwargs) -> np.ndarray[float]:
         return None
 
-    def sample_function(self, N: int, theta: Callable) -> np.ndarray[float]:
+    def sample_function(self, N: int, theta: Callable, **kwargs) -> np.ndarray[float]:
         s = self.sample(N)
         return theta(s)
     
-    def function_expectation(self, theta: Callable, N=100) -> np.ndarray[float]:
+    def function_expectation(self, theta: Callable, N=100, **kwargs) -> np.ndarray[float]:
         return self.sample_function(N, theta).mean()

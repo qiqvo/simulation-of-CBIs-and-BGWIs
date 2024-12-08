@@ -4,7 +4,8 @@ import numpy as np
 from branching_processes_simulation.random_variable import RandomVariable
 
 
-class StableRandomVariable(RandomVariable):
+# TODO: unstable near alpha=1: 
+class PositiveStableRandomVariable(RandomVariable):
     # alpha < 1
     def __init__(self, alpha: float, d: float=1) -> None:
         assert 0 < alpha <= 1 and d > 0
@@ -34,6 +35,8 @@ class StableRandomVariable(RandomVariable):
     def variance(self) -> np.float64:
         if self.alpha < 1:
             return np.infty
+        else:
+            return 0
 
     def _a(self, theta: np.ndarray[float]):
         c2 = np.sin(self.alpha * theta)
@@ -41,10 +44,9 @@ class StableRandomVariable(RandomVariable):
         return np.sin((1 - self.alpha) * theta) * c2 / np.power(np.sin(theta), 1/(1 - self.alpha))
 
     def sample(self, N: int) -> np.ndarray[float]:
-        # TODO: check the scaling
         theta = self.rng.uniform(0, 1, N)
         w = -np.log(self.rng.uniform(0, 1, N))
-        return np.power(self._a(theta) / w, (1 - self.alpha) / self.alpha)
+        return np.power(self._a(theta) / w, (1 - self.alpha) / self.alpha) * (self.d**(1/self.alpha))
     
     def sample_function(self, N: int, theta: Callable[..., Any]) -> np.ndarray[float]:
         s = self.sample(N)

@@ -8,7 +8,7 @@ from branching_processes_simulation.random_variable import RandomVariable
 class PolyaTransformedTau(RandomVariable):
     def __init__(self, alpha: float) -> None:
         self.alpha = alpha
-        self._x = betaprime(1 + 1/self.alpha, 1)
+        self._x = betaprime(self.alpha, self.alpha)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return 1 - np.power(np.power(np.abs(t), self.alpha) / (1 + np.power(np.abs(t), self.alpha)),1/self.alpha)
@@ -33,14 +33,12 @@ class PolyaTransformedTau(RandomVariable):
         if beta >= self.alpha: 
             return np.inf
         else:
-            p1 = integrate.quad(lambda x: self.pdf(x) * x**beta, 0, 1)
-            p2 = (1 + self.alpha) * integrate.quad(
+            p1 = integrate.quad(lambda x: self.pdf(x) * x**beta, 0, 1)[0]
+            p2 = integrate.quad(
                 lambda x: x**(- beta/self.alpha) / (1 + x)**(2 + 1/self.alpha), 
                 0, 1
-            )
-            return p1 + p2 
+            )[0]
+            return p1 + (1 + self.alpha)/self.alpha * p2 
 
     def sample(self, N: int) -> np.ndarray[float]:
-        x = self._x.rvs(N)
-        x = np.power(x, 1/self.alpha)
-        return x
+        return self._x.rvs(N, random_state=self.rng)**(1/self.alpha)

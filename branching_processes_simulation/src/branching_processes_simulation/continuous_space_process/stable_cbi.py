@@ -35,7 +35,6 @@ class StableCBI(CBI):
         else: 
             return 2 * self.c * time
 
-
     def sample_on_time(self, N: int, time: float, z: np.float64, **kwargs) -> np.ndarray[float]:
         s = self._cb.sample(N, time, z, **kwargs)
         s = s + self._linnik.sample(N) * (self.alpha *self.c * time)**(1 / self.alpha)

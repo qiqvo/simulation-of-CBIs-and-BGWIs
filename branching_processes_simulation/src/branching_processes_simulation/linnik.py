@@ -3,7 +3,7 @@ from sympy import symbols, diff, Function
 
 from branching_processes_simulation.exponential import Exponential
 from branching_processes_simulation.random_variable import RandomVariable
-from branching_processes_simulation.stable_random_variable import StableRandomVariable
+from branching_processes_simulation.stable_random_variable import PositiveStableRandomVariable
 
 
 
@@ -48,7 +48,7 @@ class Linnik(RandomVariable):
         self.alpha = alpha
         self.beta = beta
         # self._v = gengamma(self.delta, 1 / self.delta)
-        self._s = StableRandomVariable(self.alpha)
+        self._s = PositiveStableRandomVariable(self.alpha)
         self._laplace_transform = LinnikLaplaceTransform(alpha, beta)
 
 

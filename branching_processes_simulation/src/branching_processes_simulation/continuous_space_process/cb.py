@@ -27,7 +27,7 @@ class CB(ContinuousTimeRandomProcess):
         profile = [z]
         for i in range(1, m):
             dt = times[i]
-            profile.append(self.sample_on_time(1, [dt], profile[-1], **kwargs)[0])
+            profile.append(self.sample_on_time(1, dt, profile[-1], **kwargs)[0])
 
         return np.array(profile)
     

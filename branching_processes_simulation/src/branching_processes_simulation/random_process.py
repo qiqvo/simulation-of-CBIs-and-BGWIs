@@ -25,7 +25,6 @@ class RandomProcess(IRandom):
     def variance(self, time: float, z: np.float64) -> np.float64:
         return None
 
-    @abstractmethod
     def sample(self, N: int, times: List[float], z: np.float64, function:Callable=None, **kwargs) -> np.ndarray[np.ndarray[float]]:
         if len(times) == 1:
             res = np.array([self.sample_on_time(N, times[0], z, **kwargs)])

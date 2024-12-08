@@ -36,8 +36,8 @@ class FejerDeLaValleePoussinRandomVariable(RandomVariable):
         s = []
         i = 0
         while i < N:
-            u = np.random.uniform(-1, 1)
-            v = np.random.uniform(-1, 1)
+            u = self.rng.uniform(-1, 1)
+            v = self.rng.uniform(-1, 1)
             v_inv = 1/v
 
             if u < 0:
