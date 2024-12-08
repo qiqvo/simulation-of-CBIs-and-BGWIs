@@ -15,21 +15,13 @@ class CBI(RandomProcess):
         return self.laplace_transform(-1j * t, time, z)
 
     def laplace_transform(self, t: np.float64, time: float, z: np.float64) -> np.float64:
-        return (1 + self.alpha * self.c * np.abs(t)**self.alpha * time)**(-self.delta) * self._cb.laplace_transform(t, time, z)
+        ## TODO: 
+        return None
 
     def mean(self, time: float, z: np.float64) -> np.float64:
-        if self.alpha < 1:
-            return np.infty
-        else: 
-            return z + self.delta * time
+        ## TODO: 
+        return None
 
     def variance(self, time: float, z: np.float64) -> np.float64:
-        if self.alpha < 1:
-            return np.infty
-        else: 
-            return 2 * self.c
-
-    def sample(self, N: int, time: float, z: np.float64) -> np.ndarray[float]:
-        s = self._cb.sample(N, time, z)
-        s = s + self._linnik.sample(N) * (self.alpha *self.c * time)**(1 / self.alpha)
-        return s
+        ## TODO: 
+        return None

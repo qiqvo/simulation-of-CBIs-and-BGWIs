@@ -13,7 +13,8 @@ class CB(RandomProcess):
         return self.laplace_transform(-1j * t, time, z)
 
     def laplace_transform(self, t: np.float64, time: float, z: np.float64) -> np.float64:
-        return np.exp(-t*z / np.power(1 + self.alpha * self.c * time * np.abs(t)**self.alpha, 1 / self.alpha))
+        # TODO: 
+        return None
 
     def mean(self, time: float, z: np.float64) -> np.float64:
         return z
