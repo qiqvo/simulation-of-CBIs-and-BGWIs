@@ -59,10 +59,5 @@ class BGW(RandomProcess):
             profile[i + 1] += self.count_layer(i+1, time, child, profile)
         return len(e.children)
 
-    def sample(self, N: int, time: int, z: int) -> np.ndarray[float]:
-        # self.
-        return None
-    
-    # TODO: implement other methods? 
-    def sample_function(self, N: int, theta: typing.Callable, time: int, z: int) -> np.ndarray[float]:
-        return super().sample_function(N, theta, time, z)
+    def sample_on_times(self, N: int, times: typing.List[int], z: np.float64, **kwargs) -> np.ndarray[np.ndarray[float]]:
+        return np.array([self.sample_profile(times[-1], z)[times] for _ in range(N)]).T
