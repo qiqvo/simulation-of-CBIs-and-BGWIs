@@ -30,13 +30,13 @@ class StableCB(CB):
         else: 
             return 2 * self.c * time
 
-    def sample(self, N: int, time: float, z: np.float64) -> np.ndarray[float]:
+    def sample(self, N: int, time: float, z: np.float64, option:str='polya') -> np.ndarray[float]:
         k = (self.alpha * self.c * time)**(1 / self.alpha)
         s = poisson.rvs(z / k, size=N)
         for i in range(N):
-            s[i] = self._xi.sample(s[i]) * k
+            s[i] = self._xi.sample(s[i], option) * k
         return s
     
-    # TODO: implement other methods? 
-    def sample_function(self, N: int, time: float, theta: typing.Callable, z: np.float64) -> np.ndarray[float]:
+    def sample_function(self, N: int, time: float, theta: typing.Callable, z: np.float64) -> np.ndarray[float]:    
+        # TODO: 
         return None

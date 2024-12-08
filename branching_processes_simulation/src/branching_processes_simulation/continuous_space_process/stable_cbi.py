@@ -33,9 +33,9 @@ class StableCBI(CBI):
         if self.alpha < 1:
             return np.infty
         else: 
-            return 2 * self.c
+            return 2 * self.c * time
 
-    def sample(self, N: int, time: float, z: np.float64) -> np.ndarray[float]:
-        s = self._cb.sample(N, time, z)
+    def sample(self, N: int, time: float, z: np.float64, option='polya') -> np.ndarray[float]:
+        s = self._cb.sample(N, time, z, option)
         s = s + self._linnik.sample(N) * (self.alpha *self.c * time)**(1 / self.alpha)
         return s
