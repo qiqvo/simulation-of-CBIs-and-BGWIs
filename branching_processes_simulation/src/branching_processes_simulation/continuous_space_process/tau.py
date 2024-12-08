@@ -42,7 +42,7 @@ class Tau(RandomVariable):
     def variance(self) -> np.float64:
         return np.infty
 
-    def sample(self, N: int, option='polya') -> np.ndarray[float]:
+    def sample(self, N: int, option='polya', **kwargs) -> np.ndarray[float]:
         if option == 'polya':
             s = np.abs(self._fvp.sample(N)) / self._pxi.sample(N)
         elif option == 'cdf':
@@ -57,7 +57,7 @@ class Tau(RandomVariable):
                     h = self._ber(1/s[i], 1)
         return s
     
-    def function_expectation(self, theta: Callable, option='integrated_tail', N=100) -> np.ndarray[float]:
+    def function_expectation(self, theta: Callable, option='integrated_tail', N=100, **kwargs) -> np.ndarray[float]:
         if option == 'integrated_tail':
             delta = 0.001
             diff_theta = lambda x: (theta(x + delta) - theta(x)) / delta
