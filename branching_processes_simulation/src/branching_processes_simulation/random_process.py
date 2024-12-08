@@ -40,6 +40,20 @@ class RandomProcess(IRandom):
     def sample_on_time(self, N: int, time: float, z: np.float64, **kwargs) -> np.ndarray[float]:
         return self.sample_on_times(N, [time], z, **kwargs).flatten()
     
+    def sample_on_times(self, N: int, times: List[int], z: np.float64, **kwargs) -> np.ndarray[np.ndarray[float]]:
+        return np.array([self.sample_profile(times[-1], z, **kwargs)[times] for _ in range(N)]).T
+
     @abstractmethod
-    def sample_on_times(self, N: int, times: List[float], z: np.float64, **kwargs) -> np.ndarray[np.ndarray[float]]:
+    def _get_profile_times(self, time, **kwargs):
         return None
+
+    def sample_profile(self, time: float, z: float, **kwargs) -> np.ndarray[int]:
+        times = self._get_profile_times(time, **kwargs)
+        m = len(times)
+
+        profile = [z]
+        for i in range(1, m):
+            dt = times[i]
+            profile.append(self.sample_on_time(1, [dt], profile[-1], **kwargs)[0])
+
+        return np.array(profile)
