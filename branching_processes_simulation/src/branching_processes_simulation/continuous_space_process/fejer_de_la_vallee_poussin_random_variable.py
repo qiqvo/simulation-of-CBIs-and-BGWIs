@@ -14,7 +14,7 @@ class FejerDeLaValleePoussinRandomVariable(RandomVariable):
         return np.max(1 - np.abs(t), 0)
 
     def laplace_transform(self, t: np.float64) -> np.float64:
-        return np.real(self.characteristic_function(t))
+        return self.characteristic_function(np.real(t))
 
     def pdf(self, x: np.float64) -> np.float64:
         return 1 / 2 / np.pi * (np.sin(x / 2) / (x/2))**2
@@ -22,13 +22,15 @@ class FejerDeLaValleePoussinRandomVariable(RandomVariable):
     def cdf(self, x: np.float64) -> np.float64:
         return None
     
-    #TODO: check
     def mean(self) -> np.float64:
-        return 1
+        # Does not exist in Leb sense. 
+        return 0 
+    
+    def absolute_moment(self, k:int) -> np.float64:
+        return np.inf
 
-    #TODO: check
     def variance(self) -> np.float64:
-        return 1
+        return np.inf
 
     def sample(self, N: int) -> np.ndarray[float]:
         s = []
@@ -36,9 +38,11 @@ class FejerDeLaValleePoussinRandomVariable(RandomVariable):
         while i < N:
             u = np.random.uniform(-1, 1)
             v = np.random.uniform(-1, 1)
+            v_inv = 1/v
+
             if u < 0:
-                u, v = - u* v* v, 1/v
-            if u < np.sin(1/v)**2:
-                s.append(v)
+                u, v, v_inv = - u* v* v, v_inv, v
+            if u < np.sin(v_inv)**2:
+                s.append(2*v_inv)
                 i += 1
-        return 2 / np.array(s)
+        return np.array(s)
