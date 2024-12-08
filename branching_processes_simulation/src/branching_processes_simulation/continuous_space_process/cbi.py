@@ -1,11 +1,13 @@
-from typing import Callable
+from abc import abstractmethod
+from typing import Callable, List
 import numpy as np
 
 from branching_processes_simulation.continuous_space_process.cb import CB
+from branching_processes_simulation.continuous_space_process.continuous_time_process import ContinuousTimeRandomProcess
 from branching_processes_simulation.random_process import RandomProcess
 
 
-class CBI(RandomProcess):
+class CBI(ContinuousTimeRandomProcess):
     def __init__(self, reproduction_mechanism: Callable, immigration_mechanism: Callable) -> None:
         self._immigration_mechanism = immigration_mechanism
         self._reproduction_mechanism = reproduction_mechanism
@@ -24,4 +26,8 @@ class CBI(RandomProcess):
 
     def variance(self, time: float, z: np.float64) -> np.float64:
         ## TODO: 
+        return None
+
+    @abstractmethod
+    def sample(self, N: int, times: List[float], z: np.float64, function:Callable=None, **kwargs) -> np.ndarray[np.ndarray[float]]:
         return None

@@ -1,12 +1,12 @@
 import typing
 import numpy as np
 
-from branching_processes_simulation.random_process import RandomProcess
+from branching_processes_simulation.discrete_space_process.discrete_time_process import DiscreteTimeRandomProcess
 from branching_processes_simulation.discrete_space_process.reproduction_rv import ReproductionRandomVariable
 from branching_processes_simulation.discrete_space_process.genealogy.node import Node
 
 
-class BGW(RandomProcess):
+class BGW(DiscreteTimeRandomProcess):
     def __init__(self, reproduction: ReproductionRandomVariable) -> None:
         self._reproduction = reproduction
 
@@ -58,6 +58,3 @@ class BGW(RandomProcess):
         for child in e.children:
             profile[i + 1] += self.count_layer(i+1, time, child, profile)
         return len(e.children)
-
-    def sample_on_times(self, N: int, times: typing.List[int], z: np.float64, **kwargs) -> np.ndarray[np.ndarray[float]]:
-        return np.array([self.sample_profile(times[-1], z)[times] for _ in range(N)]).T

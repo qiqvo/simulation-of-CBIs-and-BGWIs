@@ -68,6 +68,3 @@ class BGWI(BGW):
         for child in e.children:
             profile[i + 1] += self.count_layer(i+1, time, child, profile)
         return len(e.children)
-
-    def sample_on_times(self, N: int, times: typing.List[int], z: np.float64, **kwargs) -> np.ndarray[np.ndarray[float]]:
-        return np.array([self.sample_profile(times[-1], z)[times] for _ in range(N)]).T
