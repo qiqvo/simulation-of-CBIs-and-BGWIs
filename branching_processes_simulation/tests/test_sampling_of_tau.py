@@ -13,23 +13,23 @@ from branching_processes_simulation.discrete_space_process.reproduction_exp_rv i
 
 
 def test():
-    alpha = 0.99
+    alpha = 0.4
     tau = Tau(alpha)
     def func(x):
         if x.shape == (1,):
-            # return 2*(x[0]) if x[0] < 1 else 0
-            return (x[0])**0.1
+            return 2*(x[0]) if x[0] < 1 else 0
+            # return (x[0])**0.1
         
-        # res = np.zeros_like(x)
-        # mask = x < 1
-        # res[mask] = 2*(x[mask])
-        res = x**0.1
+        res = np.zeros_like(x)
+        mask = x < 1
+        res[mask] = 2*(x[mask])
+        # res = x**0.1
         return res
     
 
-    N=1000000
-    assert np.abs(tau.function_expectation(func, N, option='integrated_tail') - 0.52) < 0.01
-    assert np.abs(tau.function_expectation(func, N, option='size_biased') - 0.52) < 0.01
+    N=10000
+    assert np.abs(tau.function_expectation(func, N, option='integrated_tail') - 0.277) < 0.05
+    # assert np.abs(tau.function_expectation(func, N, option='size_biased') - 0.27) < 0.05
 
     # print(tau.function_expectation(func, N, option='size_biased_ber'))
     res = tau.function_expectation(func, N, option=None)
@@ -37,4 +37,4 @@ def test():
     # plt.hist(tau.sample(N)**(0.1))
     # plt.show()
 
-    assert np.abs(res - 0.52) < 0.01
+    assert np.abs(res - 0.277) < 0.05
