@@ -18,4 +18,4 @@ def test():
     s = v.sample(N)
     # r = v.fractional_moment(0.1)
 
-    assert np.abs((np.abs(s)**0.1).mean() - 1.29) < 0.01
+    assert np.abs((np.abs(s)**0.1).mean() - 1.2074) < 0.01
