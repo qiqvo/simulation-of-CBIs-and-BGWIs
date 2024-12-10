@@ -51,11 +51,12 @@ class Tau(RandomVariable):
             raise NotImplementedError()
         return s
     
-    def function_expectation(self, theta: Callable, N=100, option='integrated_tail', **kwargs) -> np.ndarray[float]:
+    def function_expectation(self, theta: Callable, N=100, option='integrated_tail', theta_diff=None, **kwargs) -> np.ndarray[float]:
         if option == 'integrated_tail':
             delta = 0.001
-            diff_theta = lambda x: (theta(x + delta) - theta(x)) / delta
-            res = theta(np.array([0])) + self._linnik_0.sample_function(N, diff_theta, **kwargs).mean()
+            if theta_diff is None:
+                theta_diff = lambda x: (theta(x + delta) - theta(x)) / delta
+            res = theta(0) + self._linnik_0.sample_function(N, theta_diff, **kwargs).mean()
         elif option == 'size_biased_ber':
             s = self._linnik_1.sample(N)
             for i in range(N):
