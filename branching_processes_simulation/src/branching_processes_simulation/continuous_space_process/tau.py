@@ -70,6 +70,6 @@ class Tau(RandomVariable):
             s = self._linnik_1.sample(N)
             s = theta(s) / s
             res = s.mean()
-        else: 
+        elif option == 'polya': 
             res = self.sample_function(N, theta).mean()
         return res
