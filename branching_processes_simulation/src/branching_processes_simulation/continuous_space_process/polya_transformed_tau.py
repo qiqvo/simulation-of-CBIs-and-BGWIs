@@ -15,7 +15,8 @@ class PolyaTransformedTau(RandomVariable):
     def __init__(self, alpha: float) -> None:
         super().__init__()
         self.alpha = alpha
-        self._x = betaprime(self.alpha, self.alpha)
+        # self._x = betaprime(self.alpha, self.alpha, )
+        # self._x.random_state = self.rng
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return None

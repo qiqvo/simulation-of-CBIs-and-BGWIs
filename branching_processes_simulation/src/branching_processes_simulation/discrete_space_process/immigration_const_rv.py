@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.stats import bernoulli, binom
 
 from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable
 

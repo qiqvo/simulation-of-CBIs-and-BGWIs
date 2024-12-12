@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from typing import List, Callable
 import numpy as np
-from scipy.stats import poisson
 
 from branching_processes_simulation.continuous_space_process.continuous_time_process import ContinuousTimeRandomProcess
 
