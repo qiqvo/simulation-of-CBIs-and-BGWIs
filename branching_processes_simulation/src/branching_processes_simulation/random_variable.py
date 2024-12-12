@@ -45,11 +45,10 @@ class RandomVariable(IRandom):
         return None
 
     def sample_function(self, N: int, theta: Callable, **kwargs) -> np.ndarray[float]:
-        s = self.sample(N)
-        return theta(s)
+        return theta(self.sample(N, **kwargs))
     
     def function_expectation(self, theta: Callable, N=100, **kwargs) -> np.ndarray[float]:
-        return self.sample_function(N, theta).mean()
+        return self.sample_function(N, theta, **kwargs).mean()
     
     def _choose_x0(self):
         if self._interval_a != -np.inf:
