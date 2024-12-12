@@ -13,7 +13,7 @@ from branching_processes_simulation.discrete_space_process.reproduction_exp_rv i
 
 def test():
     alpha=0.4
-    N=100000
+    N=10000
     v = PolyaTransformedTau(alpha)
     s = v.sample(N)
     # r = v.fractional_moment(0.1)
