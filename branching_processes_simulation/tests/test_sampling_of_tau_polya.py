@@ -3,6 +3,7 @@ import numpy as np
 import time
 
 from branching_processes_simulation.continuous_space_process.fejer_de_la_vallee_poussin_random_variable import FejerDeLaValleePoussinRandomVariable
+from branching_processes_simulation.continuous_space_process.polya_transformed_tau import PolyaTransformedTau
 from branching_processes_simulation.continuous_space_process.tau import Tau
 from branching_processes_simulation.discrete_space_process.bgw import BGW
 from branching_processes_simulation.discrete_space_process.bgwi import BGWI
@@ -13,20 +14,27 @@ from branching_processes_simulation.discrete_space_process.reproduction_exp_rv i
 
 
 def test():
-    N=100000
+    N=10000
+    alpha = 0.6
+
     s = FejerDeLaValleePoussinRandomVariable()
+    p = Tau(alpha)
+    pt = PolyaTransformedTau(alpha)
 
-    sampled = s.sample(N)
-    assert np.abs((np.abs(sampled)**0.4).mean() - 1.38) < 0.01
+    s_sample = s.sample(N)
+    # p_sample = p.sample(N)
+    pt_sample = pt.sample(N)
 
+    b = s_sample / pt_sample
 
     ls = np.linspace(0, 4)
     
     res = []
     for l in ls:
-        res.append(np.exp(-l* np.abs(sampled)).mean())
+        res.append(np.exp(- l * np.abs(b)).mean())
 
     plt.plot(ls, res)
+    plt.plot(ls, p.characteristic_function(ls))
     plt.show()
 
     assert False
