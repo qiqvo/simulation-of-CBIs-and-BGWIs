@@ -1,7 +1,7 @@
 import numpy as np
 
 from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable
-from branching_processes_simulation.stable_random_variable import PositiveStableRandomVariable
+from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
 
 
 class ImmigrationExpRandomVariable(ImmigrationRandomVariable):

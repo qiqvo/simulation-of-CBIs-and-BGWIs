@@ -4,7 +4,7 @@ from sympy import symbols, diff, Function
 from branching_processes_simulation.continuous_space_process.fejer_de_la_vallee_poussin_random_variable import FejerDeLaValleePoussinRandomVariable
 from branching_processes_simulation.exponential import Exponential
 from branching_processes_simulation.random_variable import RandomVariable
-from branching_processes_simulation.stable_random_variable import PositiveStableRandomVariable
+from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
 
 
 
