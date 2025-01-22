@@ -57,20 +57,28 @@ class PositiveStableRandomVariable(StableRandomVariable):
                 + (-(2*theta**3)/3 + theta*(2*theta*cot_th \
                 + np.log(sin_th) - 2)*np.log(np.sqrt(sin_th)))*a**3
         else:
-            c2 = np.sin(self.alpha * theta)**self.alpha
-            c2 /= np.sin(theta)
-            c2 **= 1/self.alpha
-            res = np.sin((1 - self.alpha) * theta) * c2
+            res = np.sin(self.alpha * theta)**self.alpha
+            res /= np.sin(theta)
+            res **= 1/self.alpha
+            res = np.sin((1 - self.alpha) * theta) * res
         return res
 
-    def sample(self, N: int, option='scipy', **kwargs) -> np.ndarray[float]:
+    def sample(self, N: int, option='gen_scipy', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
         if option=='CMS': ## Kanter algo for totally skewed (beta=1)  
-            theta = self.rng.uniform(0, np.pi, N)
+            theta, w = self.rng.uniform(0, 1, (2, N))
             w = -np.log(self.rng.uniform(0, 1, N))
-            a = self._a(theta)
-            return np.power(a / w, (1 - alpha) / alpha) * ((self.d * (np.cos(np.pi * alpha /2)))**(1/alpha))
-        elif option == 'pos_scipy':
-            return super().sample(N, option='scipy')
-        elif option == 'polya' or option == 'scipy':
-            return np.abs(self._symmetric_stable.sample(N, option)) * ((np.cos(np.pi * alpha /2))**(1/alpha))
+            a = self._a(theta * np.pi)
+            res = np.power(a / w, (1 - alpha) / alpha) * ((self.d)**(1/alpha))
+        elif option == 'gen_CMS' or option == 'scipy':
+            if option.startswith('gen_'):
+                option = option[4:]
+            res = super().sample(N, option=option) * (np.cos(np.pi * alpha /2))**(1/alpha)
+        elif option == 'polya' or option == 'sym_scipy' or option == 'sym_CMS':
+            if option.startswith('sym_'):
+                option = option[4:]
+            res = np.abs(self._symmetric_stable.sample(N, option))
+            if option == 'CMS':
+                res *= (np.cos(np.pi * alpha /2))**(1/alpha)
+            
+        return res

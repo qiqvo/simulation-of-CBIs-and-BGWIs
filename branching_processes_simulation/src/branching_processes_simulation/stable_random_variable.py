@@ -48,10 +48,10 @@ class StableRandomVariable(RandomVariable):
         return 1 - np.abs(1 - self.alpha)
 
     def sample(self, N: int, option='scipy', **kwargs) -> np.ndarray[float]:
+        alpha = self.alpha
         if option == 'scipy':
-            res = self._s.rvs(size=N)
+            res = self._s.rvs(size=N) * np.cos(np.pi * alpha / 2)**(1/alpha)
         elif option == 'CMS':
-            alpha = self.alpha
             Phi = self.rng.uniform(-np.pi / 2, np.pi / 2, N)
             Phi_0 = -np.pi / 2 * self.beta * (self._k() / alpha)
             W = -np.log(self.rng.uniform(0, 1, N))
