@@ -18,7 +18,6 @@ class PositiveStableRandomVariable(StableRandomVariable):
     def __init__(self, alpha: float, d: float=1) -> None:
         assert alpha <= 1
         super().__init__(alpha, 1, d)
-        self._symmetric_stable = SymmetricStableRandomVariable(alpha, d)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return np.exp(- self.d * np.power(t, self.alpha))
@@ -74,11 +73,5 @@ class PositiveStableRandomVariable(StableRandomVariable):
             if option.startswith('gen_'):
                 option = option[4:]
             res = super().sample(N, option=option) * (np.cos(np.pi * alpha /2))**(1/alpha)
-        elif option == 'polya' or option == 'sym_scipy' or option == 'sym_CMS':
-            if option.startswith('sym_'):
-                option = option[4:]
-            res = np.abs(self._symmetric_stable.sample(N, option))
-            if option == 'CMS':
-                res *= (np.cos(np.pi * alpha /2))**(1/alpha)
-            
+
         return res
