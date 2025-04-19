@@ -2,8 +2,6 @@ from typing import Any, Callable
 import numpy as np
 import scipy
 
-from branching_processes_simulation.constant_variable import ConstantVariable
-from branching_processes_simulation.continuous_space_process.fejer_de_la_vallee_poussin_random_variable import FejerDeLaValleePoussinRandomVariable
 from branching_processes_simulation.random_variable import RandomVariable
 
 
