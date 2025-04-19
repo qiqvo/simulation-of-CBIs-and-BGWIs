@@ -1,10 +1,11 @@
 from typing import Callable
 import numpy as np
+from sympy import gamma
 
 from branching_processes_simulation.continuous_space_process.fejer_de_la_vallee_poussin_random_variable import FejerDeLaValleePoussinRandomVariable
-from branching_processes_simulation.continuous_space_process.polya_transformed_tau import PolyaTransformedTau
 from branching_processes_simulation.exponential import Exponential
 from branching_processes_simulation.linnik import Linnik
+from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
 from branching_processes_simulation.random_variable import RandomVariable
 
 
@@ -18,8 +19,7 @@ class Tau(RandomVariable):
         assert 0 < alpha <= 1
 
         self.alpha = alpha
-        self._fvp = FejerDeLaValleePoussinRandomVariable()
-        self._pxi = PolyaTransformedTau(alpha)
+        self._stable = PositiveStableRandomVariable(alpha)
         self._linnik_0 = Linnik(alpha, 1/alpha)
         self._linnik_1 = Linnik(alpha, 1 + 1/alpha)
         self._ber = lambda p, size: self.rng.binomial(n=1, p=p, size=size)
@@ -42,14 +42,15 @@ class Tau(RandomVariable):
     def variance(self) -> np.float64:
         return np.infty
 
-    def sample(self, N: int, option='polya', **kwargs) -> np.ndarray[float]:
-        if option == 'polya':
-            s = np.abs(self._fvp.sample(N)) / self._pxi.sample(N)
-        elif option == 'cdf':
-            #TODO: cdf(x) = int_0^inf (1 - alpha / Gamma(1/alpha) x/u e^{-(x/u)^alpha}) p_alpha(u) du
-            # s = []
-            raise NotImplementedError()
-        return s
+    def sample(self, N: int, option='cdf', **kwargs) -> np.ndarray[float]:
+        if option == 'cdf':
+            alpha = self.alpha
+            X = self._stable.sample(N)
+            U = self.rng.uniform(0, 1, N)
+            Y = X * (-np.log(-(U * X * gamma(1/alpha))/alpha))^(1/alpha)
+            return Y            
+        
+        raise NotImplementedError()
     
     def function_expectation(self, theta: Callable, N=100, option='integrated_tail', theta_diff=None, **kwargs) -> np.ndarray[float]:
         if option == 'integrated_tail':
@@ -70,6 +71,4 @@ class Tau(RandomVariable):
             s = self._linnik_1.sample(N)
             s = theta(s) / s
             res = s.mean()
-        elif option == 'polya': 
-            res = self.sample_function(N, theta).mean()
         return res
