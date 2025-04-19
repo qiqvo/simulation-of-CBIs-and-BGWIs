@@ -18,7 +18,7 @@ class PositiveStableRandomVariable(StableRandomVariable):
         super().__init__(alpha, 1, d)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
-        return np.exp(- self.d * np.power(t, self.alpha))
+        return np.exp(- self.d * np.power(- 1j * t, self.alpha))
 
     def laplace_transform(self, t: np.float64) -> np.float64:
         return np.exp(- self.d * np.power(t, self.alpha))
@@ -60,7 +60,7 @@ class PositiveStableRandomVariable(StableRandomVariable):
             res = np.sin((1 - self.alpha) * theta) * res
         return res
 
-    def sample(self, N: int, option='gen_scipy', **kwargs) -> np.ndarray[float]:
+    def sample(self, N: int, option='scipy', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
         if option=='CMS': ## Kanter algo for totally skewed (beta=1)  
             theta, w = self.rng.uniform(0, 1, (2, N))
