@@ -97,7 +97,7 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
             res = np.sin((1 - self.alpha) * theta) * res
         return res
 
-    def sample(self, N: int, option='cdf', **kwargs) -> np.ndarray[float]:
+    def sample(self, N: int, option='mcmc', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
         if option == 'cdf':
             theta, U = self.rng.uniform(0, 1, (2, N))

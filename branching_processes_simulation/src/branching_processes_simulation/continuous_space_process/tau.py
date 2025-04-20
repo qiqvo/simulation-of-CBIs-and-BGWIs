@@ -17,7 +17,7 @@ class Tau(RandomVariable):
         assert 0 < alpha <= 1
 
         self.alpha = alpha
-        self._S = UnsizebiasedPositiveStableRandomVariable(alpha)
+        self._u_stable = UnsizebiasedPositiveStableRandomVariable(alpha)
         self._linnik_0 = Linnik(alpha, 1/alpha)
         self._linnik_1 = Linnik(alpha, 1 + 1/alpha)
         self._ber = lambda p, size: self.rng.binomial(n=1, p=p, size=size)
@@ -40,11 +40,12 @@ class Tau(RandomVariable):
     def variance(self) -> np.float64:
         return np.infty
 
-    def sample(self, N: int, option='cdf', **kwargs) -> np.ndarray[float]:
+    def sample(self, N: int, **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
-        X = self._S.sample(N)
+        X = self._u_stable.sample(N, **kwargs)
         U = self.rng.uniform(0, 1, N)
-        return X * (-np.log(U))^(1/alpha)
+
+        return X * (-np.log(U))**(1/alpha)
     
     def function_expectation(self, theta: Callable, N=100, option='integrated_tail', theta_diff=None, **kwargs) -> np.ndarray[float]:
         if option == 'integrated_tail':
