@@ -22,8 +22,7 @@ class StableRandomVariable(RandomVariable):
             re_t = np.real(t)
             sign_t = re_t / np.abs(re_t)
 
-            a1 = np.tan(np.pi * self.alpha / 2) * sign_t * self.beta
-            a1 = 1  - a1 * 1j
+            a1 = np.exp(-1j * np.pi * self.alpha / 2 * sign_t * self.beta)
             
         return np.exp(-self.d * np.power(np.abs(t), self.alpha) * a1) 
 

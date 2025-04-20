@@ -1,6 +1,7 @@
 from typing import Any, Callable
 import numpy as np
-from sympy import gamma, hyp1f1, gammaincc
+from scipy.special import gamma, hyp1f1, gammaincc
+from scipy.integrate import quad
 
 from branching_processes_simulation.constant_variable import ConstantVariable
 from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
@@ -25,7 +26,7 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
         return self.laplace_transform(- 1j * t)
 
     def laplace_transform(self, t: np.float64) -> np.float64:
-        return np.exp(- self.d * np.power(t, self.alpha))
+        return (1 - self.mean() * quad(lambda y: np.exp(-y**self.alpha), 0, t)[0])
 
     def pdf(self, x: np.float64) -> np.float64:
         return None # unknown
@@ -105,11 +106,11 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
             # res = np.power(a / w, (1 - alpha) / alpha) * ((self.d)**(1/alpha))
             res = []
             return res
-        elif option == 'MCMC':
-            N_burn_in = kwargs.get('N_burn_in', 10)
+        elif option == 'mcmc':
+            N_burn_in = kwargs.get('N_burn_in', 1000)
             X = self._stable.sample(N + 1 + N_burn_in, **kwargs)
             U = self.rng.uniform(0, 1, N + 1 + N_burn_in)
             for i in range(N + N_burn_in):
-                if U[i] < X[i] / X[i + 1]:
+                if U[i] > X[i] / X[i + 1]:
                     X[i + 1] = X[i]
             return X[N_burn_in + 1:]

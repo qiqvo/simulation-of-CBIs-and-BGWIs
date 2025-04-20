@@ -56,11 +56,11 @@ class PositiveStableRandomVariable(StableRandomVariable):
         else:
             res = np.sin(self.alpha * theta)**self.alpha
             res /= np.sin(theta)
-            res **= 1/self.alpha
+            res **= 1/(1 - self.alpha)
             res = np.sin((1 - self.alpha) * theta) * res
         return res
 
-    def sample(self, N: int, option='scipy', **kwargs) -> np.ndarray[float]:
+    def sample(self, N: int, option='CMS', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
         if option=='CMS': ## Kanter algo for totally skewed (beta=1)  
             theta, w = self.rng.uniform(0, 1, (2, N))
@@ -70,6 +70,7 @@ class PositiveStableRandomVariable(StableRandomVariable):
         elif option == 'gen_CMS' or option == 'scipy':
             if option.startswith('gen_'):
                 option = option[4:]
-            res = super().sample(N, option=option) * (np.cos(np.pi * alpha /2))**(1/alpha)
-
+            res = super().sample(N, option=option) # * (1 + np.tan(np.pi/2 * alpha * (1 - alpha)))**(-1/alpha)
+        else:
+            raise NotImplementedError(f"Option {option} is not implemented")
         return res
