@@ -1,11 +1,10 @@
 from typing import Callable
 import numpy as np
-from sympy import gamma
 
 from branching_processes_simulation.exponential import Exponential
 from branching_processes_simulation.linnik import Linnik
-from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
 from branching_processes_simulation.random_variable import RandomVariable
+from branching_processes_simulation.unsizebiased_positive_stable_random_variable import UnsizebiasedPositiveStableRandomVariable
 
 
 class Tau(RandomVariable):
@@ -18,16 +17,16 @@ class Tau(RandomVariable):
         assert 0 < alpha <= 1
 
         self.alpha = alpha
-        self._stable = PositiveStableRandomVariable(alpha)
+        self._S = UnsizebiasedPositiveStableRandomVariable(alpha)
         self._linnik_0 = Linnik(alpha, 1/alpha)
         self._linnik_1 = Linnik(alpha, 1 + 1/alpha)
         self._ber = lambda p, size: self.rng.binomial(n=1, p=p, size=size)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
-        return 1 - np.power(np.power(np.abs(t), self.alpha) / (1 + np.power(np.abs(t), self.alpha)),1/self.alpha)
+        return self.laplace_transform(-1j * t)
 
     def laplace_transform(self, t: np.float64) -> np.float64:
-        return np.real(self.characteristic_function(t))
+        return 1 - np.power(np.power(t, self.alpha) / (1 + np.power(t, self.alpha)), 1/self.alpha)
 
     def pdf(self, x: np.float64) -> np.float64:
         return None
@@ -42,14 +41,10 @@ class Tau(RandomVariable):
         return np.infty
 
     def sample(self, N: int, option='cdf', **kwargs) -> np.ndarray[float]:
-        if option == 'cdf':
-            alpha = self.alpha
-            X = self._stable.sample(N)
-            U = self.rng.uniform(0, 1, N)
-            Y = X * (-np.log(-(U * X * gamma(1/alpha))/alpha))^(1/alpha)
-            return Y            
-        
-        raise NotImplementedError()
+        alpha = self.alpha
+        X = self._S.sample(N)
+        U = self.rng.uniform(0, 1, N)
+        return X * (-np.log(U))^(1/alpha)
     
     def function_expectation(self, theta: Callable, N=100, option='integrated_tail', theta_diff=None, **kwargs) -> np.ndarray[float]:
         if option == 'integrated_tail':
