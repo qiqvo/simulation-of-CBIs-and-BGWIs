@@ -4,9 +4,10 @@ from sympy import gamma, hyp1f1, gammaincc
 
 from branching_processes_simulation.constant_variable import ConstantVariable
 from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
+from branching_processes_simulation.random_variable import RandomVariable
 
 
-class UnsizebiasedPositiveStableRandomVariable(PositiveStableRandomVariable):
+class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
     def __new__(cls, alpha: float, d: float=1, *args, **kwargs):
         if alpha == 1:
             return ConstantVariable(d)
@@ -15,7 +16,10 @@ class UnsizebiasedPositiveStableRandomVariable(PositiveStableRandomVariable):
     # alpha < 1
     def __init__(self, alpha: float, d: float=1) -> None:
         assert alpha <= 1
-        super().__init__(alpha, 1, d)
+        self.alpha = alpha
+        self.d = d
+
+        self._stable = PositiveStableRandomVariable(alpha, d)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return self.laplace_transform(- 1j * t)
@@ -92,12 +96,20 @@ class UnsizebiasedPositiveStableRandomVariable(PositiveStableRandomVariable):
             res = np.sin((1 - self.alpha) * theta) * res
         return res
 
-    def sample(self, N: int, **kwargs) -> np.ndarray[float]:
+    def sample(self, N: int, option='cdf', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
+        if option == 'cdf':
+            theta, U = self.rng.uniform(0, 1, (2, N))
+            A = self._a(theta * np.pi)
 
-        theta, U = self.rng.uniform(0, 1, (2, N))
-        A = self._a(theta * np.pi)
-
-        res = np.power(a / w, (1 - alpha) / alpha) * ((self.d)**(1/alpha))
-
-        return res
+            # res = np.power(a / w, (1 - alpha) / alpha) * ((self.d)**(1/alpha))
+            res = []
+            return res
+        elif option == 'MCMC':
+            N_burn_in = kwargs.get('N_burn_in', 10)
+            X = self._stable.sample(N + 1 + N_burn_in, **kwargs)
+            U = self.rng.uniform(0, 1, N + 1 + N_burn_in)
+            for i in range(N + N_burn_in):
+                if U[i] < X[i] / X[i + 1]:
+                    X[i + 1] = X[i]
+            return X[N_burn_in + 1:]
