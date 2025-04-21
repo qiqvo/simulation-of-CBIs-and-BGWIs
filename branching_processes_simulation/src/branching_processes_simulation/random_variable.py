@@ -18,7 +18,7 @@ class RandomVariable(IRandom):
     @abstractmethod
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         try:
-            res = quad(lambda x: np.exp(1j * t) * self.pdf(x), self._interval_a, self._interval_b)[0]
+            res = quad(lambda x: np.exp(1j * t * x) * self.pdf(x), self._interval_a, self._interval_b)[0]
             return res
         except Exception as e:
             raise NotImplementedError()
@@ -118,7 +118,7 @@ class RandomVariable(IRandom):
                         approximation='exact',
                         **kwargs) -> np.ndarray[float]:
         if self._table is None or (self._table and len(self._table) < 2 * N and N < 1e6):
-            self.precompute_cdf_table(int(min(N, 1e5)), **kwargs)
+            self.precompute_cdf_table(int(min(N, 1e4)), **kwargs)
     
         if approximation == 'exact':
             return self._sample_from_cdf_exact(N, pdf_available)
