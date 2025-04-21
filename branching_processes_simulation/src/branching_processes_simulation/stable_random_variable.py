@@ -61,7 +61,7 @@ class StableRandomVariable(RandomVariable):
 
     # corresponds to the CMS paper notation. Not Zolotorev's.
     @staticmethod
-    def stable_a(alpha, beta, theta: np.ndarray[float]):
+    def a(alpha, beta, theta: np.ndarray[float]):
         res = np.cos((1 - alpha) * theta - np.pi / 2 * beta * StableRandomVariable.K(alpha))
         res /= np.cos(theta)
         res **= (1 - alpha) / alpha
@@ -77,7 +77,7 @@ class StableRandomVariable(RandomVariable):
         elif option == 'CMS':
             theta, w = self.rng.uniform(0, 1, (2, N))
             w = -np.log(w)
-            res = self.stable_a(alpha, self.beta, theta * np.pi - np.pi / 2)
+            res = self.a(alpha, self.beta, theta * np.pi - np.pi / 2)
             res *= w**(-(1 - alpha) / alpha) * (self.d**(1/alpha))
             # print('gen a:', self.stable_a(alpha, 1, 0+0.1))
         return res

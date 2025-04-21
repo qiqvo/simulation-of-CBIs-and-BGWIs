@@ -44,7 +44,7 @@ class PositiveStableRandomVariable(StableRandomVariable):
             return 0
 
     @staticmethod
-    def a(alpha, theta: np.ndarray[float]):
+    def a(alpha, beta, theta: np.ndarray[float]):
         res = np.sin(alpha * theta)**alpha
         res /= np.sin(theta)
         res **= 1/(1 - alpha)
@@ -57,7 +57,7 @@ class PositiveStableRandomVariable(StableRandomVariable):
         if option=='CMS': ## Kanter algo for totally skewed (beta=1)  
             theta, w = self.rng.uniform(0, 1, (2, N))
             w = -np.log(w)
-            res = self.stable_a(alpha, 1, theta * np.pi - np.pi / 2)
+            res = self.a(alpha, self.beta, theta * np.pi - np.pi / 2)
             res *= w**(-(1 - alpha) / alpha) * (self.d**(1/alpha))
             # print('pos a:', PositiveStableRandomVariable.a(alpha, np.pi/2+0.1))
         elif option == 'gen_CMS' or option == 'scipy':

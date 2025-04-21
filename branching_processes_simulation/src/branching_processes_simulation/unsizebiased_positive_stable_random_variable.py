@@ -18,7 +18,7 @@ class ARandomVariable(RandomVariable):
         self.alpha = alpha
     
     def pdf(self, x: np.float64) -> np.float64:
-        res = self.alpha / np.pi / PositiveStableRandomVariable.a(self.alpha, x)
+        res = self.alpha / np.pi / PositiveStableRandomVariable.a(self.alpha, 1, x)
         return res
 
     def cdf(self, x: np.float64) -> np.float64:
@@ -67,10 +67,10 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
         return (1 - self.mean() * quad(lambda y: np.exp(-y**self.alpha), 0, t)[0])
 
     def pdf(self, x: np.float64) -> np.float64:
-        return None # unknown
+        raise NotImplementedError()
 
     def cdf(self, x: np.float64) -> np.float64:
-        return None # unknown
+        raise NotImplementedError()
 
     def mean(self) -> np.float64:
         if self.alpha < 1:
@@ -86,30 +86,12 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
         else:
             return 0
 
-    @staticmethod
-    def f(alpha, x):
-        # First term
-        term1 = - ((alpha + 1) * x**((-alpha - 1) / alpha) + alpha * x**((-2*alpha - 1) / alpha))
-        term1 *= alpha**4 * np.exp(-1/x) * hyp1f1(2, (4*alpha + 1) / alpha, 1/x)
-        
-        # Components for the second term
-        A = ((x + 1/2) * alpha**2 + (3 * x * alpha) / 2 + x / 2) * alpha
-        B = ((x - 1/2) * alpha + x / 2) * (alpha + 1) * ((x + 1) * alpha + x)
-        
-        term2 = -12 * (alpha + 1/3) * (alpha + 1/2)
-        term2 *= (-x * A * gamma((2*alpha + 1) / alpha) * gammaincc((2*alpha + 1) / alpha, 1/x) + gamma((alpha + 1) / alpha) * B)
-        
-        # Denominator
-        denom = 6 * alpha**4 + 11 * alpha**3 + 6 * alpha**2 + alpha
-        
-        return (term1 + term2) / denom
-
     def sample(self, N: int, option='cdf', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
         if option == 'cdf':
             U = self.rng.uniform(0, 1, N)
             A = self._a[alpha].sample(N, **kwargs)
-            aTheta = PositiveStableRandomVariable.a(self.alpha, A)
+            aTheta = PositiveStableRandomVariable.a(self.alpha, 1, A)
             res = aTheta * np.power((1 / self.rng.gamma(1/alpha, 1, N)), (1-alpha) / alpha)
             return res
         elif option == 'mcmc':
