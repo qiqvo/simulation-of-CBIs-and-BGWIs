@@ -44,21 +44,11 @@ class PositiveStableRandomVariable(StableRandomVariable):
             return 0
 
     @staticmethod
-    def a(self, alpha, theta: np.ndarray[float]):
-        if alpha > 0.99:
-            sin_th = np.sin(theta)
-            cot_th = np.sqrt(1 - sin_th**2)/sin_th
-            a = 1 - alpha
-
-            res = a*theta \
-                - theta*(theta*cot_th + np.log(sin_th))*a**2 \
-                + (-(2*theta**3)/3 + theta*(2*theta*cot_th \
-                + np.log(sin_th) - 2)*np.log(np.sqrt(sin_th)))*a**3
-        else:
-            res = np.sin(alpha * theta)**alpha
-            res /= np.sin(theta)
-            res **= 1/(1 - alpha)
-            res = np.sin((1 - alpha) * theta) * res
+    def a(alpha, theta: np.ndarray[float]):
+        res = np.sin(alpha * theta)**alpha
+        res /= np.sin(theta)
+        res **= 1/(1 - alpha)
+        res = np.sin((1 - alpha) * theta) * res
         return res
 
     def sample(self, N: int, option='CMS', **kwargs) -> np.ndarray[float]:
