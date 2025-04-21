@@ -110,12 +110,6 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
         if option == 'cdf':
             U = self.rng.uniform(0, 1, N)
             A = self._a[alpha].sample(N, **kwargs)
-            print(A)
-
-            print(self._a[alpha]._table)
-
-            # x.f(alpha, x**(alpha / (1-alpha))*A)
-            # res = np.power(a / w, (1 - alpha) / alpha) * ((self.d)**(1/alpha))
             aTheta = PositiveStableRandomVariable.a(self.alpha, A)
             res = np.power((aTheta / self.rng.gamma(1/alpha, 1, N)), (1-alpha) / alpha)
             return res
