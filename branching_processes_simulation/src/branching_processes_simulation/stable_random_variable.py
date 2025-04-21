@@ -22,8 +22,9 @@ class StableRandomVariable(RandomVariable):
         ## scipy uses a different parameterization:
         beta_scipy = np.tan(np.pi * alpha / 2 * beta) / np.tan(np.pi * alpha / 2)
         # TODO: check the scaling! 
+        scipy_scale = (d * np.cos(np.pi * alpha / 2 * beta))**(1/alpha)
         self._s = scipy.stats.levy_stable(alpha=alpha, beta=beta_scipy, loc=0, 
-                                          scale=d * np.cos(np.pi * alpha / 2 * beta))
+                                          scale=scipy_scale)
         self._s.random_state = self.rng
 
     def characteristic_function(self, t: np.float64) -> np.complex64:
@@ -74,9 +75,9 @@ class StableRandomVariable(RandomVariable):
         if option == 'scipy':
             res = self._s.rvs(size=N)
         elif option == 'CMS':
-            Phi = self.rng.uniform(-np.pi / 2, np.pi / 2, N)
-            W = -np.log(self.rng.uniform(0, 1, N))
-            res = self.stable_a(alpha, self.beta, Phi) / W**((1 - alpha) / alpha)
-
-            res *= self.d ** 1/self.alpha
+            theta, w = self.rng.uniform(0, 1, (2, N))
+            w = -np.log(w)
+            res = self.stable_a(alpha, self.beta, theta * np.pi - np.pi / 2)
+            res *= w**(-(1 - alpha) / alpha) * (self.d**(1/alpha))
+            # print('gen a:', self.stable_a(alpha, 1, 0+0.1))
         return res

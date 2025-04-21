@@ -18,8 +18,7 @@ class ARandomVariable(RandomVariable):
         self.alpha = alpha
     
     def pdf(self, x: np.float64) -> np.float64:
-        res = PositiveStableRandomVariable.a(self.alpha, x)**(1 - 1/self.alpha)
-        res *= self.alpha / np.pi
+        res = self.alpha / np.pi / PositiveStableRandomVariable.a(self.alpha, x)
         return res
 
     def cdf(self, x: np.float64) -> np.float64:
@@ -111,7 +110,7 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
             U = self.rng.uniform(0, 1, N)
             A = self._a[alpha].sample(N, **kwargs)
             aTheta = PositiveStableRandomVariable.a(self.alpha, A)
-            res = np.power((aTheta / self.rng.gamma(1/alpha, 1, N)), (1-alpha) / alpha)
+            res = aTheta * np.power((1 / self.rng.gamma(1/alpha, 1, N)), (1-alpha) / alpha)
             return res
         elif option == 'mcmc':
             N_burn_in = kwargs.get('N_burn_in', 1000)
