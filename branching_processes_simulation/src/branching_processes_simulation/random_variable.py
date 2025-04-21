@@ -7,8 +7,9 @@ from concurrent.futures import ThreadPoolExecutor
 from branching_processes_simulation.i_random import IRandom
 
 class RandomVariable(IRandom):
-    _interval_a = -np.inf
-    _interval_b = +np.inf
+    ## Random variable is defined on the interval [a, b]:
+    _interval_a = np.nan
+    _interval_b = np.nan
 
     def __init__(self) -> None:
         self._table = None 
@@ -51,7 +52,9 @@ class RandomVariable(IRandom):
         return self.sample_function(N, theta, **kwargs).mean()
     
     def _choose_x0(self):
-        if self._interval_a != -np.inf:
+        if self._interval_a != -np.inf and self._interval_b != np.inf:
+            x0 = (self._interval_a + self._interval_b) / 2
+        elif self._interval_a != -np.inf:
             x0 = self._interval_a
         elif self._interval_b != np.inf:
             x0 = self._interval_b
@@ -59,9 +62,8 @@ class RandomVariable(IRandom):
             x0 = 0
         return x0
 
-    def precompute_cdf_table(self, granularity=100, x0=None):
-        if x0 is None:
-            x0 = self._choose_x0()
+    def precompute_cdf_table_exact(self, granularity=100):
+        x0 = self._choose_x0()
 
         us = np.linspace(0, 1, granularity, True)[1:-1]
         self._table = np.zeros(len(us)+2)
@@ -79,11 +81,40 @@ class RandomVariable(IRandom):
         
         res = list(res)
         self._table[1:-1] = res
+        self._table = [np.linspace(0, 1, granularity, True), self._table]
+
+    def precompute_cdf_table_linear(self, granularity=100, x0=None):
+        xs = np.linspace(self._interval_a, self._interval_b, granularity, endpoint=True)[1:-1]
+        us = self.cdf(xs)
+        xs = np.concatenate(([self._interval_a], xs, [self._interval_b]))
+        us = np.concatenate(([0], us, [1]))
+        self._table = [us, xs]
+
+    def precompute_cdf_table(self, granularity=100, precompute_table_approximation='exact'):
+        if precompute_table_approximation == 'exact':
+            self.precompute_cdf_table_exact(granularity)
+        elif precompute_table_approximation == 'linear':
+            self.precompute_cdf_table_linear(granularity)
+        else:
+            raise ValueError(f"Unknown approximation method: {precompute_table_approximation}")
         
-    def sample_from_cdf(self, N: int, pdf_available=False, **kwargs) -> np.ndarray[float]:
+    def sample_from_cdf(self, N: int, pdf_available=False, 
+                        approximation='exact',
+                        **kwargs) -> np.ndarray[float]:
         if self._table is None or (self._table and len(self._table) < 2 * N and N < 1e6):
-            self.precompute_cdf_table(1000) # int(min(N, 1e6)))
+            self.precompute_cdf_table(int(min(N, 1e6)), **kwargs)
     
+        if approximation == 'exact':
+            return self._sample_from_cdf_exact(N, pdf_available)
+        if approximation == 'linear':
+            return self._sample_from_cdf_linear(N)
+
+    def _sample_from_cdf_linear(self, N: int):
+        us = self.rng.uniform(0, 1, N)
+        interpolation = np.interp(us, self._table[0], self._table[1])
+        return interpolation
+
+    def _sample_from_cdf_exact(self, N: int, pdf_available=False):
         us = self.rng.uniform(0, 1, N)
         # inds = (us * (len(self._table) - 1)).astype(int)
         
