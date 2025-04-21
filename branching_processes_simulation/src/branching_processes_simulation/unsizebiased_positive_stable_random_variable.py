@@ -105,7 +105,7 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
         
         return (term1 + term2) / denom
 
-    def sample(self, N: int, option='mcmc', **kwargs) -> np.ndarray[float]:
+    def sample(self, N: int, option='cdf', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
         if option == 'cdf':
             U = self.rng.uniform(0, 1, N)
