@@ -43,21 +43,22 @@ class PositiveStableRandomVariable(StableRandomVariable):
         else:
             return 0
 
-    def _a(self, theta: np.ndarray[float]):
-        if self.alpha > 0.99:
+    @staticmethod
+    def a(self, alpha, theta: np.ndarray[float]):
+        if alpha > 0.99:
             sin_th = np.sin(theta)
             cot_th = np.sqrt(1 - sin_th**2)/sin_th
-            a = 1 - self.alpha
+            a = 1 - alpha
 
             res = a*theta \
                 - theta*(theta*cot_th + np.log(sin_th))*a**2 \
                 + (-(2*theta**3)/3 + theta*(2*theta*cot_th \
                 + np.log(sin_th) - 2)*np.log(np.sqrt(sin_th)))*a**3
         else:
-            res = np.sin(self.alpha * theta)**self.alpha
+            res = np.sin(alpha * theta)**alpha
             res /= np.sin(theta)
-            res **= 1/(1 - self.alpha)
-            res = np.sin((1 - self.alpha) * theta) * res
+            res **= 1/(1 - alpha)
+            res = np.sin((1 - alpha) * theta) * res
         return res
 
     def sample(self, N: int, option='CMS', **kwargs) -> np.ndarray[float]:
@@ -65,7 +66,7 @@ class PositiveStableRandomVariable(StableRandomVariable):
         if option=='CMS': ## Kanter algo for totally skewed (beta=1)  
             theta, w = self.rng.uniform(0, 1, (2, N))
             w = -np.log(self.rng.uniform(0, 1, N))
-            a = self._a(theta * np.pi)
+            a = PositiveStableRandomVariable.a(alpha, theta * np.pi)
             res = np.power(a / w, (1 - alpha) / alpha) * ((self.d)**(1/alpha))
         elif option == 'gen_CMS' or option == 'scipy':
             if option.startswith('gen_'):
