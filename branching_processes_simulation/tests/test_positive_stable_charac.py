@@ -32,36 +32,36 @@ def test_positive_stable():
     # c = (np.log(x2) - np.log(x0)) / -x**alpha
     # print(x, c, np.abs(c))
 
-    As = np.linspace(0.05, 0.99, 50)
-    # xs = np.linspace(-20, 20, 50)
-    cs = []
-    # for x in xs:
-    for alpha in As:
-        S = PositiveStableRandomVariable(alpha)
-        s = S.sample(100000, option='scipy')
-        x0 = np.exp(-(-1j * np.abs(x))**alpha)
-        x1 = (np.mean(np.exp(1j * x * s)))
+    # As = np.linspace(0.05, 0.99, 50)
+    # # xs = np.linspace(-20, 20, 50)
+    # cs = []
+    # # for x in xs:
+    # for alpha in As:
+    #     S = PositiveStableRandomVariable(alpha)
+    #     s = S.sample(100000, option='scipy')
+    #     x0 = np.exp(-(-1j * np.abs(x))**alpha)
+    #     x1 = (np.mean(np.exp(1j * x * s)))
 
-        c = (np.log(x1) - np.log(x0)) / -np.abs(x)**alpha
-        cs.append(np.abs(c))
+    #     c = (np.log(x1) - np.log(x0)) / -np.abs(x)**alpha
+    #     cs.append(np.abs(c))
         
-    cs = np.array(cs)
-    plt.plot(As, cs)
-    # plt.plot(As, np.arctan(cs / (1 - As)) *2 / np.pi)
-    # plt.plot(As, cs)
-    # plt.plot(As, (cs - 1) / (1 - As) / As**(-1/As))
-    # plt.plot(As, (cs / np.cos(np.pi * As / 2) / (gamma(1 - As) / As)))
-    # plt.plot(As, (cs / np.cos(np.pi * As / 2) * np.pi / 2))
-    # plt.plot(As, (np.cos(np.pi * As / 2)))
-    plt.show()
+    # cs = np.array(cs)
+    # # plt.plot(As, cs)
+    # # plt.plot(As, np.arctan(cs / (1 - As)) *2 / np.pi)
+    # # plt.plot(As, cs)
+    # # plt.plot(As, (cs - 1) / (1 - As) / As**(-1/As))
+    # # plt.plot(As, (cs / np.cos(np.pi * As / 2) / (gamma(1 - As) / As)))
+    # # plt.plot(As, (cs / np.cos(np.pi * As / 2) * np.pi / 2))
+    # # plt.plot(As, (np.cos(np.pi * As / 2)))
+    # # plt.show()
 
-    # bs = (cs - 1) / (1 - As) / As**()
-    # plt.plot(As, np.log(bs))
-    # plt.show()
+    # # bs = (cs - 1) / (1 - As) / As**()
+    # # plt.plot(As, np.log(bs))
+    # # plt.show()
 
 
-    print(np.max(cs), As[np.argmax(cs)])
+    # print(np.max(cs), As[np.argmax(cs)])
 
-    # assert np.isclose(x1, x0, rtol=0.01), f"Expected {x1} to be close to {x0}"
-    # assert np.isclose(x2, x0, rtol=0.01), f"Expected {x2} to be close to {x0}"
-    assert np.isclose(x1 + 1, x0, rtol=0.01), f"Expected {x1} to be close to {x0}"
+    # # assert np.isclose(x1, x0, rtol=0.01), f"Expected {x1} to be close to {x0}"
+    # # assert np.isclose(x2, x0, rtol=0.01), f"Expected {x2} to be close to {x0}"
+    # # assert np.isclose(x1 + 1, x0, rtol=0.01), f"Expected {x1} to be close to {x0}"

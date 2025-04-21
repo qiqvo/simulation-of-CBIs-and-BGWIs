@@ -13,8 +13,8 @@ def test_unsizebiased_mcmc_sampling():
     S = UnsizebiasedPositiveStableRandomVariable(alpha)
 
     s = S.sample(500000, option='cdf')
-    plt.hist(s, bins=20)
-    plt.show()
+    # plt.hist(s, bins=20)
+    # plt.show()
 
     C = S.mean()
 
