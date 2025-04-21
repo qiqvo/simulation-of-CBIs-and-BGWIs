@@ -32,9 +32,13 @@ class StableCB(CB):
 
     def sample_on_time(self, N: int, time: float, z: np.float64, **kwargs) -> np.ndarray[float]:
         k = (self.alpha * self.c * time)**(1 / self.alpha)
-        s = poisson.rvs(z / k, size=N)
-        for i in range(N):
-            s[i] = np.sum(self._xi.sample(s[i], **kwargs)) * k
+        s = self.rng.poisson(z / k, size=N)
+        
+        X = self._xi.sample(np.sum(s), **kwargs)
+        b = np.cumulative_sum(s[:-1], include_initial=True)
+        s = np.add.reduceat(X, b) * k
+        # for i in range(N):
+        #     s[i] = np.sum(self._xi.sample(s[i], **kwargs)) * k
         return s
     
     def sample_function(self, N: int, time: float, theta: typing.Callable, z: np.float64) -> np.ndarray[float]:    
