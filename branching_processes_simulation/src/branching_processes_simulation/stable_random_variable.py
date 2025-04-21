@@ -6,17 +6,30 @@ from branching_processes_simulation.random_variable import RandomVariable
 
 
 class StableRandomVariable(RandomVariable):
+    """
+    We use Zolotorev's representation of the stable distribution:
+    phi(t) = exp(-d * |t|^alpha * exp(-i * pi * alpha / 2 * sign(t) * beta)).
+    """
+
     def __init__(self, alpha: float, beta:float, d: float=1) -> None:
-        assert 0 < alpha <= 2 and alpha != 1 and d > 0 and -1 <= beta <= 1
+        ## alpha > 1 is not supported
+        assert 0 < alpha < 1 and d > 0 and -1 <= beta <= 1
 
         self.alpha = alpha
         self.d = d
         self.beta = beta
         
-        self._s = scipy.stats.levy_stable(alpha=alpha, beta=beta, loc=0, scale=1)
+        ## scipy uses a different parameterization:
+        beta_scipy = np.tan(np.pi * alpha / 2 * beta) / np.tan(np.pi * alpha / 2)
+        # TODO: check the scaling! 
+        self._s = scipy.stats.levy_stable(alpha=alpha, beta=beta_scipy, loc=0, 
+                                          scale=d * np.cos(np.pi * alpha / 2 * beta))
         self._s.random_state = self.rng
 
     def characteristic_function(self, t: np.float64) -> np.complex64:
+        if t == 0: 
+            return 1
+        
         a1 = 1
         if self.beta != 0:
             re_t = np.real(t)
@@ -24,35 +37,46 @@ class StableRandomVariable(RandomVariable):
 
             a1 = np.exp(-1j * np.pi * self.alpha / 2 * sign_t * self.beta)
             
-        return np.exp(-self.d * np.power(np.abs(t), self.alpha) * a1) 
+        return np.exp(-self.d * np.power(np.abs(t), self.alpha) * a1)
 
     def laplace_transform(self, t: np.float64) -> np.float64:
         return np.real(self.characteristic_function(-t * 1j))
 
     def pdf(self, x: np.float64) -> np.float64:
-        return None # unknown
+        raise NotImplementedError()
 
     def cdf(self, x: np.float64) -> np.float64:
-        return None # unknown
+        raise NotImplementedError()
 
     def mean(self) -> np.float64:
-        return None
+        return np.inf if self.beta == 1 else -np.inf if self.beta == -1 else np.nan
 
     def variance(self) -> np.float64:
-        return None
+        return np.inf
     
-    def _k(self):
-        return 1 - np.abs(1 - self.alpha)
+    @staticmethod
+    def K(alpha: float) -> float:
+        return 1 - np.abs(1 - alpha)
 
+    # corresponds to the CMS paper notation. Not Zolotorev's.
+    @staticmethod
+    def stable_a(alpha, beta, theta: np.ndarray[float]):
+        res = np.cos((1 - alpha) * theta - np.pi / 2 * beta * StableRandomVariable.K(alpha))
+        res /= np.cos(theta)
+        res **= (1 - alpha) / alpha
+        res *= np.sin(alpha * theta + np.pi / 2 * beta * StableRandomVariable.K(alpha))
+        res /= np.cos(theta)
+        # res **= alpha/(1 - alpha)
+        return res
+    
     def sample(self, N: int, option='scipy', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
         if option == 'scipy':
-            res = self._s.rvs(size=N) * np.cos(np.pi * alpha / 2)**(1/alpha)
+            res = self._s.rvs(size=N)
         elif option == 'CMS':
             Phi = self.rng.uniform(-np.pi / 2, np.pi / 2, N)
-            Phi_0 = -np.pi / 2 * self.beta * (self._k() / alpha)
             W = -np.log(self.rng.uniform(0, 1, N))
+            res = self.stable_a(alpha, self.beta, Phi) / W**((1 - alpha) / alpha)
 
-            res = np.sin(alpha * (Phi - Phi_0)) / (np.cos(Phi))**(1/alpha) \
-                    * (np.cos(Phi - alpha * (Phi - Phi_0)) / W) ** ((1 - alpha) / alpha)
-        return self.d ** 1/self.alpha * res
+            res *= self.d ** 1/self.alpha
+        return res

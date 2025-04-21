@@ -18,13 +18,16 @@ class SymmetricStableRandomVariable(StableRandomVariable):
         self._fvp = FejerDeLaValleePoussinRandomVariable()
 
     def laplace_transform(self, t: np.float64) -> np.float64:
-        return None # doesn't exist
+        return np.nan
+
+    def characteristic_function(self, t: np.complex64) -> np.complex64:
+        return np.exp(-self.d * np.power(np.abs(t), self.alpha))
 
     def pdf(self, x: np.float64) -> np.float64:
-        return None # unknown
+        raise NotImplementedError()
 
     def cdf(self, x: np.float64) -> np.float64:
-        return None # unknown
+        raise NotImplementedError()
 
     def sample(self, N: int, option='scipy', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha

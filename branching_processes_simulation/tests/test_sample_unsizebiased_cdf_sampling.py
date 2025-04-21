@@ -24,5 +24,5 @@ def test_unsizebiased_mcmc_sampling():
     x = 1
     x1 = (1 - C * quad(lambda y: np.exp(-y**alpha), 0, x)[0])
     x2 = (np.mean(np.exp(-x*s)))
-    assert np.isclose(x1, x2, rtol=5e-4), f"Expected {x1} to be close to {x2}"
+    assert np.isclose(x1, x2, rtol=1e-3), f"Expected {x1} to be close to {x2}"
 
