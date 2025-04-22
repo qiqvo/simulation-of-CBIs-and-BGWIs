@@ -32,6 +32,9 @@ class StableCB(CriticalCB):
         m = len(z)
         S = np.zeros((m, N), np.float64)
         for i in range(len(z)):
+            if z[i] == 0:
+                continue
+
             s = self.rng.poisson(z[i] / k, size=N)
             X = self._xi.sample(np.sum(s), **kwargs) * k
             b = np.cumulative_sum(s[s>0][:-1], include_initial=True)

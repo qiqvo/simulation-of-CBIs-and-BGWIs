@@ -1,3 +1,4 @@
+from typing import List
 import numpy as np
 
 from branching_processes_simulation.random_process.cbi import CriticalCBI
@@ -37,5 +38,5 @@ class StableCBI(CriticalCBI):
 
     def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[float]]:
         s = self._cb.sample(N, time, z, **kwargs)
-        s = s + self._linnik.sample(N) * (self.alpha *self.c * time)**(1 / self.alpha)
+        s = s + self._linnik.sample(N) * (self.alpha * self.c * time)**(1 / self.alpha)
         return s
