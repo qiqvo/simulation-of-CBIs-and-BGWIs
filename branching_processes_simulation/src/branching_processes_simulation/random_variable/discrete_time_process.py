@@ -1,4 +1,4 @@
-from branching_processes_simulation.random_process import RandomProcess
+from branching_processes_simulation.random_process.random_process import RandomProcess
 
 
 class DiscreteTimeRandomProcess(RandomProcess):

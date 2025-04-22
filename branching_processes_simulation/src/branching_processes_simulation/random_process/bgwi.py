@@ -1,10 +1,10 @@
 import typing
 import numpy as np
 
-from branching_processes_simulation.discrete_space_process.genealogy.node import Node
+# from branching_processes_simulation.discrete_space_process.genealogy.node import Node
 from branching_processes_simulation.random_variable.reproduction_rv import ReproductionRandomVariable
 from branching_processes_simulation.random_variable.immigration_rv import Immigration
-from branching_processes_simulation.discrete_space_process.bgw import BGW
+from branching_processes_simulation.random_process.bgw import BGW
 
 
 class BGWI(BGW):
@@ -56,15 +56,15 @@ class BGWI(BGW):
             profile[i, i:] = super().sample_profile(time-i, immigrants[i])
         return profile
 
-    def sample_profile_from_genealogy(self, time: int, root: Node) -> np.ndarray[int]:
-        profile = np.zeros(time, int)
-        profile[0] = len(root.children)
-        for e in root.children:
-            profile[1] += self.count_layer(1, time, e, profile)
-        profile = profile - 1
-        return profile
+    # def sample_profile_from_genealogy(self, time: int, root: Node) -> np.ndarray[int]:
+    #     profile = np.zeros(time, int)
+    #     profile[0] = len(root.children)
+    #     for e in root.children:
+    #         profile[1] += self.count_layer(1, time, e, profile)
+    #     profile = profile - 1
+    #     return profile
         
-    def count_layer(self, i: int, time: int, e: Node, profile: np.ndarray[int]) -> int:
-        for child in e.children:
-            profile[i + 1] += self.count_layer(i+1, time, child, profile)
-        return len(e.children)
+    # def count_layer(self, i: int, time: int, e: Node, profile: np.ndarray[int]) -> int:
+    #     for child in e.children:
+    #         profile[i + 1] += self.count_layer(i+1, time, child, profile)
+    #     return len(e.children)

@@ -2,7 +2,7 @@ import typing
 import numpy as np
 from scipy.stats import poisson
 
-from branching_processes_simulation.continuous_space_process.cb import CB
+from branching_processes_simulation.random_process.cb import CB
 from branching_processes_simulation.random_variable.tau import Tau
 
 

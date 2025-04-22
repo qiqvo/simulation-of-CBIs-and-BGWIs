@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import List, Callable
 import numpy as np
 
-from branching_processes_simulation.continuous_space_process.continuous_time_process import ContinuousTimeRandomProcess
+from branching_processes_simulation.random_process.continuous_time_process import ContinuousTimeRandomProcess
 
 
 class CB(ContinuousTimeRandomProcess):

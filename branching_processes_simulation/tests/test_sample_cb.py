@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 import numpy as np
 
-from branching_processes_simulation.continuous_space_process.stable_cb import StableCB
+from branching_processes_simulation.random_process.stable_cb import StableCB
 
 
 def test_sample_cb():
