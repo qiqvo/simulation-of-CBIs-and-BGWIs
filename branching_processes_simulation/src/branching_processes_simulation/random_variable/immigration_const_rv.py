@@ -1,9 +1,9 @@
 import numpy as np
 
-from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable
+from branching_processes_simulation.random_variable.immigration_rv import Immigration
 
 
-class ImmigrationConstRandomVariable(ImmigrationRandomVariable):
+class ImmigrationConstRandomVariable(Immigration):
     def __init__(self, alpha, d) -> None:
         super().__init__(alpha, d, lambda x: 1)
 

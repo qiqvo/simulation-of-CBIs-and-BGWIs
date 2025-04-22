@@ -2,13 +2,13 @@ import typing
 import numpy as np
 
 from branching_processes_simulation.discrete_space_process.genealogy.node import Node
-from branching_processes_simulation.discrete_space_process.reproduction_rv import ReproductionRandomVariable
-from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable
+from branching_processes_simulation.random_variable.reproduction_rv import ReproductionRandomVariable
+from branching_processes_simulation.random_variable.immigration_rv import Immigration
 from branching_processes_simulation.discrete_space_process.bgw import BGW
 
 
 class BGWI(BGW):
-    def __init__(self, reproduction: ReproductionRandomVariable, immigration: ImmigrationRandomVariable) -> None:
+    def __init__(self, reproduction: ReproductionRandomVariable, immigration: Immigration) -> None:
         super().__init__(reproduction)
         self._immigration = immigration
 

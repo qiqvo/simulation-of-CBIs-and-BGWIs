@@ -1,6 +1,6 @@
 import numpy as np
 
-from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable, RandomVariable
+from branching_processes_simulation.random_variable.immigration_rv import Immigration, RandomVariable
 
 
 class ReproductionRandomVariable(RandomVariable):
@@ -45,7 +45,7 @@ class ReproductionRandomVariable(RandomVariable):
             eps = 0.001
             self.l_prime = lambda x: (self.l(x + eps) - self.l(x)) / 0.001
         self.l1 = lambda x: self.l(x) + self.l_prime(x) * x / (1 + self.alpha)
-        immigration = ImmigrationRandomVariable(self.c * (1 + self.alpha), self.l1)
+        immigration = Immigration(self.c * (1 + self.alpha), self.l1)
         return immigration
 
     def sample(self, N: int) -> np.ndarray[float]:

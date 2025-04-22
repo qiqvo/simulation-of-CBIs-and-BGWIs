@@ -1,8 +1,8 @@
 import typing
 import numpy as np
 
-from branching_processes_simulation.discrete_space_process.discrete_time_process import DiscreteTimeRandomProcess
-from branching_processes_simulation.discrete_space_process.reproduction_rv import ReproductionRandomVariable
+from branching_processes_simulation.random_variable.discrete_time_process import DiscreteTimeRandomProcess
+from branching_processes_simulation.random_variable.reproduction_rv import ReproductionRandomVariable
 from branching_processes_simulation.discrete_space_process.genealogy.node import Node
 
 

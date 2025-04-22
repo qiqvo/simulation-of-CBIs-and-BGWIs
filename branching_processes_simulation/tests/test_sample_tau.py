@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 import numpy as np
 
-from branching_processes_simulation.continuous_space_process.tau import Tau
+from branching_processes_simulation.random_variable.tau import Tau
 from branching_processes_simulation.random_variable.linnik import Linnik
 from branching_processes_simulation.random_variable.positive_stable import PositiveStable
 
