@@ -25,8 +25,9 @@ class RandomProcess(IRandom):
     def variance(self, time: float, z: np.float64) -> np.float64:
         return None
 
+    ## Returns a sample in a shape (len(z), N) 
     @abstractmethod
-    def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[float]]:
+    def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[np.float64]]:
         return None
 
     @abstractmethod
