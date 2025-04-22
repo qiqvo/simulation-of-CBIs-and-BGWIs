@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from typing import Callable
 import numpy as np
 
-from branching_processes_simulation.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.random_variable import RandomVariable
 
 
-class ConstantVariable(RandomVariable):
+class Constant(RandomVariable):
     _interval_a = -np.inf
     _interval_b = +np.inf
 

@@ -5,12 +5,12 @@ import time
 from scipy.integrate import quad
 from scipy.special import gamma
 
-from branching_processes_simulation.unsizebiased_positive_stable_random_variable import ARandomVariable, UnsizebiasedPositiveStableRandomVariable 
+from branching_processes_simulation.random_variable.unsizebiased_positive_stable import ARandomVariable, UnsizebiasedPositiveStable 
 
 
 def test_unsizebiased_mcmc_sampling():
     alpha = 0.6
-    S = UnsizebiasedPositiveStableRandomVariable(alpha)
+    S = UnsizebiasedPositiveStable(alpha)
 
     s = S.sample(500000, option='cdf')
     # plt.hist(s, bins=20)

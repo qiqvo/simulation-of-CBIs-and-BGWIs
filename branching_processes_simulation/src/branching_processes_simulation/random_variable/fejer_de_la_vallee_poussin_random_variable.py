@@ -1,9 +1,12 @@
 import numpy as np
 
-from branching_processes_simulation.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.random_variable import RandomVariable
 
 # Fejer-de la Vallee Poussin
-class FejerDeLaValleePoussinRandomVariable(RandomVariable):
+class FejerDeLaValleePoussin(RandomVariable):
+    _interval_a = -np.inf
+    _interval_b = np.inf
+
     def __init__(self) -> None:
         return None
 
@@ -11,7 +14,7 @@ class FejerDeLaValleePoussinRandomVariable(RandomVariable):
         return np.max(1 - np.abs(t), 0)
 
     def laplace_transform(self, t: np.float64) -> np.float64:
-        return self.characteristic_function(np.real(t))
+        raise ValueError("Laplace transform is not defined for Fejer-de la Vallee Poussin distribution.")   
 
     def pdf(self, x: np.float64) -> np.float64:
         return 1 / 2 / np.pi * (np.sin(x / 2) / (x/2))**2
@@ -21,7 +24,7 @@ class FejerDeLaValleePoussinRandomVariable(RandomVariable):
     
     def mean(self) -> np.float64:
         # Does not exist in Leb sense. 
-        return 0 
+        return np.nan
     
     def absolute_moment(self, k:int) -> np.float64:
         return np.inf

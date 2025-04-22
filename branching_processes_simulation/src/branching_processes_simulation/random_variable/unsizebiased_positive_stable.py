@@ -1,54 +1,24 @@
 from collections.abc import Iterable
 from typing import Any, Callable, Dict
 import numpy as np
-from scipy.special import gamma, hyp1f1, gammaincc
+from scipy.special import gamma
 from scipy.integrate import quad
 
-from branching_processes_simulation.constant_variable import ConstantVariable
-from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
-from branching_processes_simulation.random_variable import RandomVariable
-from branching_processes_simulation.utils import parallel_integrate_upper_limits
+from branching_processes_simulation.random_variable.a import A
+from branching_processes_simulation.random_variable.constant import Constant
+from branching_processes_simulation.random_variable.positive_stable import PositiveStable
+from branching_processes_simulation.random_variable.random_variable import RandomVariable
 
-class ARandomVariable(RandomVariable):
+class UnsizebiasedPositiveStable(RandomVariable):
     _interval_a = 0
-    _interval_b = np.pi
+    _interval_b = +np.inf
 
-    def __init__(self, alpha: float) -> None:
-        super().__init__()
-        self.alpha = alpha
-    
-    def pdf(self, x: np.float64) -> np.float64:
-        res = self.alpha / np.pi / PositiveStableRandomVariable.a(self.alpha, 1, x)
-        return res
-
-    def cdf(self, x: np.float64) -> np.float64:
-        if isinstance(x, Iterable):
-            return parallel_integrate_upper_limits(self.pdf, 0, x)
-        else:
-            return quad(self.pdf, 0, x)[0]
-    
-    def sample(self, N, **kwargs):
-        return self.sample_from_cdf(N, True, approximation='linear', **kwargs)
-    
-    def characteristic_function(self, t):
-        return super().characteristic_function(t)
-    
-    def laplace_transform(self, t):
-        return super().laplace_transform(t)
-    
-    def mean(self) -> np.float64:
-        return super().mean()
-    
-    def variance(self) -> np.float64:  
-        return super().variance()
-
-class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
     def __new__(cls, alpha: float, d: float=1, *args, **kwargs):
         if alpha == 1:
-            return ConstantVariable(d)
+            return Constant(d)
         return super().__new__(cls)
     
-    _a : Dict[float, ARandomVariable] = {}
+    _a : Dict[float, A] = {}
     
     # alpha < 1
     def __init__(self, alpha: float, d: float=1) -> None:
@@ -56,9 +26,9 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
         self.alpha = alpha
         self.d = d
 
-        self._stable = PositiveStableRandomVariable(alpha, d)
+        self._stable = PositiveStable(alpha, d)
         if alpha not in self._a:
-            self._a[alpha] = ARandomVariable(alpha)
+            self._a[alpha] = A(alpha)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return self.laplace_transform(- 1j * t)
@@ -90,8 +60,8 @@ class UnsizebiasedPositiveStableRandomVariable(RandomVariable):
         alpha = self.alpha
         if option == 'cdf':
             U = self.rng.uniform(0, 1, N)
-            A = self._a[alpha].sample(N, **kwargs)
-            aTheta = PositiveStableRandomVariable.a(self.alpha, 1, A)
+            aTheta = self._a[alpha].sample(N, **kwargs)
+            aTheta = PositiveStable.a_shifted(self.alpha, aTheta)
             res = aTheta * np.power((1 / self.rng.gamma(1/alpha, 1, N)), (1-alpha) / alpha)
             return res
         elif option == 'mcmc':

@@ -5,12 +5,12 @@ import time
 from scipy.integrate import quad
 from scipy.special import gamma
 
-from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
+from branching_processes_simulation.random_variable.positive_stable import PositiveStable
 
 
 def test_positive_stable():
     alpha = 0.6
-    S = PositiveStableRandomVariable(alpha)
+    S = PositiveStable(alpha)
 
     s1 = S.sample(500000, option='CMS')
 

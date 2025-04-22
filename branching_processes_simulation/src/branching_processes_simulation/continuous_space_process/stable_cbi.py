@@ -2,7 +2,7 @@ import numpy as np
 
 from branching_processes_simulation.continuous_space_process.cbi import CBI
 from branching_processes_simulation.continuous_space_process.stable_cb import StableCB
-from branching_processes_simulation.linnik import Linnik
+from branching_processes_simulation.random_variable.linnik import Linnik
 
 
 class StableCBI(CBI):

@@ -2,10 +2,13 @@
 from typing import Callable
 import numpy as np
 import scipy
-from branching_processes_simulation.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.random_variable import RandomVariable
 
 
 class Exponential(RandomVariable):
+    _interval_a = 0
+    _interval_b = +np.inf
+
     def __init__(self, rate: float) -> None:
         assert 0 < rate
         self.rate = rate

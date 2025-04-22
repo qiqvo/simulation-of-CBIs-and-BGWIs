@@ -2,20 +2,23 @@ from typing import Any, Callable
 import numpy as np
 import scipy
 
-from branching_processes_simulation.constant_variable import ConstantVariable
-from branching_processes_simulation.continuous_space_process.fejer_de_la_vallee_poussin_random_variable import FejerDeLaValleePoussinRandomVariable
-from branching_processes_simulation.stable_random_variable import StableRandomVariable
+from branching_processes_simulation.random_variable.constant import Constant
+from branching_processes_simulation.random_variable.fejer_de_la_vallee_poussin_random_variable import FejerDeLaValleePoussin
+from branching_processes_simulation.random_variable.stable import Stable
 
 
-class SymmetricStableRandomVariable(StableRandomVariable):
+class SymmetricStable(Stable):
+    _interval_a = -np.inf
+    _interval_b = +np.inf
+
     def __new__(cls, alpha: float, d: float=1, *args, **kwargs):
         if alpha == 1:
-            return ConstantVariable(d)
+            return Constant(d)
         return super().__new__(cls)
     
     def __init__(self, alpha: float, d: float=1) -> None:
         super().__init__(alpha, 0, d)
-        self._fvp = FejerDeLaValleePoussinRandomVariable()
+        self._fvp = FejerDeLaValleePoussin()
 
     def laplace_transform(self, t: np.float64) -> np.float64:
         return np.nan

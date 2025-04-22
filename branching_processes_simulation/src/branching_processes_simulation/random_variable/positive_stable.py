@@ -2,14 +2,17 @@ from typing import Any, Callable
 import numpy as np
 import scipy
 
-from branching_processes_simulation.constant_variable import ConstantVariable
-from branching_processes_simulation.stable_random_variable import StableRandomVariable
+from branching_processes_simulation.random_variable.constant import Constant
+from branching_processes_simulation.random_variable.stable import Stable
 
 
-class PositiveStableRandomVariable(StableRandomVariable):
+class PositiveStable(Stable):
+    _interval_a = 0
+    _interval_b = +np.inf
+    
     def __new__(cls, alpha: float, d: float=1, *args, **kwargs):
         if alpha == 1:
-            return ConstantVariable(d)
+            return Constant(d)
         return super().__new__(cls)
     
     # alpha < 1
@@ -44,7 +47,7 @@ class PositiveStableRandomVariable(StableRandomVariable):
             return 0
 
     @staticmethod
-    def a(alpha, beta, theta: np.ndarray[float]):
+    def a_shifted(alpha, theta: np.ndarray[float]):
         res = np.sin(alpha * theta)**alpha
         res /= np.sin(theta)
         res **= 1/(1 - alpha)
@@ -52,12 +55,16 @@ class PositiveStableRandomVariable(StableRandomVariable):
         res **= ((1 - alpha) / alpha)
         return res
 
+    @staticmethod
+    def a(alpha, beta, theta: np.ndarray[float]):
+        return PositiveStable.a_shifted(alpha, theta + np.pi/2)
+    
     def sample(self, N: int, option='CMS', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
         if option=='CMS': ## Kanter algo for totally skewed (beta=1)  
             theta, w = self.rng.uniform(0, 1, (2, N))
             w = -np.log(w)
-            res = self.a(alpha, self.beta, theta * np.pi - np.pi / 2)
+            res = self.a_shifted(alpha, theta * np.pi)
             res *= w**(-(1 - alpha) / alpha) * (self.d**(1/alpha))
             # print('pos a:', PositiveStableRandomVariable.a(alpha, np.pi/2+0.1))
         elif option == 'gen_CMS' or option == 'scipy':

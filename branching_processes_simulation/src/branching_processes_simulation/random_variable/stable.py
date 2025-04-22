@@ -2,14 +2,16 @@ from typing import Any, Callable
 import numpy as np
 import scipy
 
-from branching_processes_simulation.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.random_variable import RandomVariable
 
 
-class StableRandomVariable(RandomVariable):
+class Stable(RandomVariable):
     """
     We use Zolotorev's representation of the stable distribution:
     phi(t) = exp(-d * |t|^alpha * exp(-i * pi * alpha / 2 * sign(t) * beta)).
     """
+    _interval_a = -np.inf
+    _interval_b = +np.inf
 
     def __init__(self, alpha: float, beta:float, d: float=1) -> None:
         ## alpha > 1 is not supported
@@ -62,10 +64,10 @@ class StableRandomVariable(RandomVariable):
     # corresponds to the CMS paper notation. Not Zolotorev's.
     @staticmethod
     def a(alpha, beta, theta: np.ndarray[float]):
-        res = np.cos((1 - alpha) * theta - np.pi / 2 * beta * StableRandomVariable.K(alpha))
+        res = np.cos((1 - alpha) * theta - np.pi / 2 * beta * Stable.K(alpha))
         res /= np.cos(theta)
         res **= (1 - alpha) / alpha
-        res *= np.sin(alpha * theta + np.pi / 2 * beta * StableRandomVariable.K(alpha))
+        res *= np.sin(alpha * theta + np.pi / 2 * beta * Stable.K(alpha))
         res /= np.cos(theta)
         # res **= alpha/(1 - alpha)
         return res

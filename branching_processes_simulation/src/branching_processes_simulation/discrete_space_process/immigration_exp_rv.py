@@ -1,13 +1,13 @@
 import numpy as np
 
 from branching_processes_simulation.discrete_space_process.immigration_rv import ImmigrationRandomVariable
-from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
+from branching_processes_simulation.random_variable.positive_stable import PositiveStable
 
 
 class ImmigrationExpRandomVariable(ImmigrationRandomVariable):
     def __init__(self, alpha, d) -> None:
         super().__init__(alpha, d, ImmigrationExpRandomVariable.create_k(alpha, d))
-        self._s = PositiveStableRandomVariable(self.alpha)
+        self._s = PositiveStable(self.alpha)
 
     @staticmethod
     def create_k(alpha, d):

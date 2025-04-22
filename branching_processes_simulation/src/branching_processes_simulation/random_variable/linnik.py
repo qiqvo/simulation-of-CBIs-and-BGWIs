@@ -1,9 +1,9 @@
 import numpy as np
 from sympy import symbols, diff, Function
 
-from branching_processes_simulation.exponential import Exponential
-from branching_processes_simulation.random_variable import RandomVariable
-from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
+from branching_processes_simulation.random_variable.exponential import Exponential
+from branching_processes_simulation.random_variable.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.positive_stable import PositiveStable
 
 
 
@@ -37,6 +37,9 @@ class LinnikLaplaceTransform():
 
 
 class Linnik(RandomVariable):
+    _interval_a = 0
+    _interval_b = +np.inf
+
     def __new__(cls, alpha: float, *args, **kwargs):
         if alpha == 1:
             return Exponential(1)
@@ -48,7 +51,7 @@ class Linnik(RandomVariable):
         self.alpha = alpha
         self.beta = beta
         # self._v = gengamma(self.delta, 1 / self.delta)
-        self._s = PositiveStableRandomVariable(self.alpha)
+        self._s = PositiveStable(self.alpha)
         self._laplace_transform = LinnikLaplaceTransform(alpha, beta)
 
 
@@ -76,6 +79,7 @@ class Linnik(RandomVariable):
             v = self.rng.gamma(self.beta, 1, N)
             s = self._s.sample(N)
             return np.power(v, 1/alpha) * s
+        raise NotImplementedError(f"Sampling option '{option}' is not implemented.")
             
     def laplace_transform_kth_derivative_at_x(self, k: int, t: np.float64) -> np.float64:
         # TODO: (-1)**k * ?

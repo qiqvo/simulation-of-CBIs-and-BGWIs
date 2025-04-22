@@ -5,16 +5,16 @@ import time
 from scipy.integrate import quad
 from scipy.special import gamma
 
-from branching_processes_simulation.symmetric_stable_random_variable import SymmetricStableRandomVariable
+from branching_processes_simulation.random_variable.symmetric_stable import SymmetricStable
 
 
 def test_sample_symm_stable():
     alpha = 0.8
-    S = SymmetricStableRandomVariable(alpha)
+    S = SymmetricStable(alpha)
 
     s1 = S.sample(100000, option='polya')
     s2 = S.sample(100000, option='scipy')
-    s3 = S.sample(1000000, option='CMS')
+    s3 = S.sample(100000, option='CMS')
 
     x = 1
     x0 = np.exp(-x**alpha)

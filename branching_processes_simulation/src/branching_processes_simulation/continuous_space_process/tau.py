@@ -1,10 +1,10 @@
 from typing import Callable
 import numpy as np
 
-from branching_processes_simulation.exponential import Exponential
-from branching_processes_simulation.linnik import Linnik
-from branching_processes_simulation.random_variable import RandomVariable
-from branching_processes_simulation.unsizebiased_positive_stable_random_variable import UnsizebiasedPositiveStableRandomVariable
+from branching_processes_simulation.random_variable.exponential import Exponential
+from branching_processes_simulation.random_variable.linnik import Linnik
+from branching_processes_simulation.random_variable.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.unsizebiased_positive_stable import UnsizebiasedPositiveStable
 
 
 class Tau(RandomVariable):
@@ -17,7 +17,7 @@ class Tau(RandomVariable):
         assert 0 < alpha <= 1
 
         self.alpha = alpha
-        self._u_stable = UnsizebiasedPositiveStableRandomVariable(alpha)
+        self._u_stable = UnsizebiasedPositiveStable(alpha)
         self._linnik_0 = Linnik(alpha, 1/alpha)
         self._linnik_1 = Linnik(alpha, 1 + 1/alpha)
         self._ber = lambda p, size: self.rng.binomial(n=1, p=p, size=size)

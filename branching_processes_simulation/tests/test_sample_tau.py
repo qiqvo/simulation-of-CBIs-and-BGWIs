@@ -2,8 +2,8 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 from branching_processes_simulation.continuous_space_process.tau import Tau
-from branching_processes_simulation.linnik import Linnik
-from branching_processes_simulation.positive_stable_random_variable import PositiveStableRandomVariable
+from branching_processes_simulation.random_variable.linnik import Linnik
+from branching_processes_simulation.random_variable.positive_stable import PositiveStable
 
 
 def test_tau():
