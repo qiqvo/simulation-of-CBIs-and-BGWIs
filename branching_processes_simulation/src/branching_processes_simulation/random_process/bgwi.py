@@ -2,13 +2,13 @@ import typing
 import numpy as np
 
 # from branching_processes_simulation.discrete_space_process.genealogy.node import Node
-from branching_processes_simulation.random_variable.reproduction_rv import ReproductionRandomVariable
-from branching_processes_simulation.random_variable.immigration_rv import Immigration
+from branching_processes_simulation.random_variable.reproduction import ReproductionSL
+from branching_processes_simulation.random_variable.immigration_sl import ImmigrationSL
 from branching_processes_simulation.random_process.bgw import BGW
 
 
 class BGWI(BGW):
-    def __init__(self, reproduction: ReproductionRandomVariable, immigration: Immigration) -> None:
+    def __init__(self, reproduction: ReproductionSL, immigration: ImmigrationSL) -> None:
         super().__init__(reproduction)
         self._immigration = immigration
 
@@ -47,7 +47,7 @@ class BGWI(BGW):
             res += m**(time -1) * (m**time - 1) / (m - 1) *v*z
         
         return res
-    
+
     def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[float]]:
     # def sample_profile(self, time: int, z: int) -> np.ndarray[int]:
         profile = np.zeros((time, time), int)

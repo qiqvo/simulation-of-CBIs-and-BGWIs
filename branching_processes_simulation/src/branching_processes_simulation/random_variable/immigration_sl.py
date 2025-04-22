@@ -4,7 +4,7 @@ import numpy as np
 from branching_processes_simulation.random_variable.random_variable import RandomVariable
 
 
-class Immigration(RandomVariable):
+class ImmigrationSL(RandomVariable):
     def __init__(self, alpha, d, k) -> None:
         super().__init__()
         self.alpha = alpha

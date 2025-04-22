@@ -2,12 +2,12 @@ import typing
 import numpy as np
 
 from branching_processes_simulation.random_process.discrete_time_process import DiscreteTimeRandomProcess
-from branching_processes_simulation.random_variable.reproduction_rv import ReproductionRandomVariable
+from branching_processes_simulation.random_variable.reproduction import ReproductionSL
 # from branching_processes_simulation.discrete_space_process.genealogy.node import Node
 
 
 class BGW(DiscreteTimeRandomProcess):
-    def __init__(self, reproduction: ReproductionRandomVariable) -> None:
+    def __init__(self, reproduction: ReproductionSL) -> None:
         self._reproduction = reproduction
 
     def get_reproduction_sample(self, N: int):
