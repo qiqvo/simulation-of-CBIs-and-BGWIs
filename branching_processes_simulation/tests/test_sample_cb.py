@@ -11,7 +11,7 @@ def test_sample_cb():
 
     t = 1
     z = 1
-    s1 = X.sample_on_time(500000, t, z)
+    s1 = X.sample(500000, t, [z])
 
     x = 1
     x0 = X.laplace_transform(x, t, z)

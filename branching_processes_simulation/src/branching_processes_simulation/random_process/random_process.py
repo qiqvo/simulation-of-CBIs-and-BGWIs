@@ -25,34 +25,22 @@ class RandomProcess(IRandom):
     def variance(self, time: float, z: np.float64) -> np.float64:
         return None
 
-    def sample(self, N: int, times: List[float], z: np.float64, function:Callable=None, **kwargs) -> np.ndarray[np.ndarray[float]]:
-        if len(times) == 1:
-            res = np.array([self.sample_on_time(N, times[0], z, **kwargs)])
-        else:
-            res = self.sample_on_times(N, times, z, **kwargs)
-        
-        if function is not None:
-            for i in range(len(times)):
-                res[i] = function(res[i], t=times[i])
-        return res
-
-    def sample_on_time(self, N: int, time: float, z: np.float64, **kwargs) -> np.ndarray[float]:
-        return self.sample_on_times(N, [time], z, **kwargs).flatten()
-    
-    def sample_on_times(self, N: int, times: List[int], z: np.float64, **kwargs) -> np.ndarray[np.ndarray[float]]:
-        return np.array([self.sample_profile(times[-1], z, **kwargs)[times] for _ in range(N)]).T
+    @abstractmethod
+    def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[float]]:
+        return None
 
     @abstractmethod
     def _get_profile_times(self, time, **kwargs):
         return None
 
-    def sample_profile(self, time: float, z: float, **kwargs) -> np.ndarray[int]:
+    def sample_profile(self, N: int, time: float, z: float, **kwargs) -> np.ndarray[int]:
         times = self._get_profile_times(time, **kwargs)
         m = len(times)
 
-        profile = [z]
+        profile = np.zeros((N, m), np.float64)
+        profile[:, 0] = z 
         for i in range(1, m):
             dt = times[i]
-            profile.append(self.sample_on_time(1, [dt], profile[-1], **kwargs)[0])
+            profile[:, i] = self.sample(N, dt, profile[:, i - 1], **kwargs)
 
-        return np.array(profile)
+        return profile

@@ -48,7 +48,8 @@ class BGWI(BGW):
         
         return res
     
-    def sample_profile(self, time: int, z: int) -> np.ndarray[int]:
+    def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[float]]:
+    # def sample_profile(self, time: int, z: int) -> np.ndarray[int]:
         profile = np.zeros((time, time), int)
         immigrants = self.get_immigration_sample(time)
         profile[0, :] = super().sample_profile(time, z + immigrants[0])
