@@ -62,7 +62,7 @@ class UnsizebiasedPositiveStable(RandomVariable):
             U = self.rng.uniform(0, 1, N)
             aTheta = self._a[alpha].sample(N, **kwargs)
             aTheta = PositiveStable.a_shifted(self.alpha, aTheta)
-            res = aTheta * np.power((1 / self.rng.gamma(1/alpha, 1, N)), (1-alpha) / alpha)
+            res = aTheta * np.power(self.rng.gamma(1/alpha, 1, N), -(1-alpha) / alpha)
             return res
         elif option == 'mcmc':
             N_burn_in = kwargs.get('N_burn_in', 1000)

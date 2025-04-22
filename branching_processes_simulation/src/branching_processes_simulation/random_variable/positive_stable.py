@@ -51,7 +51,7 @@ class PositiveStable(Stable):
         res = np.sin(alpha * theta)**alpha
         res /= np.sin(theta)
         res **= 1/(1 - alpha)
-        res = np.sin((1 - alpha) * theta) * res
+        res *= np.sin((1 - alpha) * theta)
         res **= ((1 - alpha) / alpha)
         return res
 
