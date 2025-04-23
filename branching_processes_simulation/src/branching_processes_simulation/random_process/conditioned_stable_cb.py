@@ -6,7 +6,7 @@ from branching_processes_simulation.random_process.stable_cbi import StableCBI
 from branching_processes_simulation.random_variable.tau import Tau
 from branching_processes_simulation.random_variable.zero_truncated_poisson import ZeroTruncatedPoisson
 
-
+## CB conditioned to live (forever) is a CBI with d = c * (1 + alpha)
 class ConditionedStableCB(StableCBI):
     def __init__(self, alpha: np.float64, c: np.float64) -> None:
         assert 0 < alpha <= 1 and c > 0
