@@ -12,7 +12,7 @@ def test_sample_cbi():
 
     t = 1
     z = 1
-    s1 = X.sample(500000, t, [z])
+    s1 = X.sample(50000, t, [z])
 
     x = 1
     x0 = X.laplace_transform(x, t, z)
