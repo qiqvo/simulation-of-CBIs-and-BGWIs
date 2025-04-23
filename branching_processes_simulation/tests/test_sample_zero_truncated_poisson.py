@@ -5,7 +5,7 @@ from branching_processes_simulation.random_variable.zero_truncated_poisson impor
 
 
 def test_sample_zero_truncated_poisson():
-    rate = 4
+    rate = 6
     X = ZeroTruncatedPoisson(rate)
 
     s1 = X.sample(500000, option='cdf')

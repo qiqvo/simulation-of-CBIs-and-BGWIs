@@ -73,7 +73,7 @@ class Linnik(RandomVariable):
     def variance(self) -> np.float64:
         return np.inf if self.alpha < 1 else self.beta
 
-    def sample(self, N: int, option='stable') -> np.ndarray[float]:
+    def sample(self, N: int, option='stable', **kwargs) -> np.ndarray[float]:
         alpha = self.alpha
         if option=='stable':
             v = self.rng.gamma(self.beta, 1, N)

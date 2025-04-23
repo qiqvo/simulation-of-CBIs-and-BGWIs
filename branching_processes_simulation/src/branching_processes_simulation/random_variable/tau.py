@@ -40,12 +40,23 @@ class Tau(RandomVariable):
     def variance(self) -> np.float64:
         return np.infty
 
-    def sample(self, N: int, **kwargs) -> np.ndarray[float]:
-        alpha = self.alpha
-        X = self._u_stable.sample(N, **kwargs)
-        U = self.rng.uniform(0, 1, N)
+    def sample(self, N: int, option='cdf', **kwargs) -> np.ndarray[float]:
+        if option == 'cdf':
+            alpha = self.alpha
+            X = self._u_stable.sample(N, **kwargs)
+            U = self.rng.uniform(0, 1, N)
 
-        return X * (-np.log(U))**(1/alpha)
+            return X * (-np.log(U))**(1/alpha)
+        elif option == 'mcmc':
+            N_burn_in = kwargs.get('N_burn_in', 1000)
+            X = self._linnik_1.sample(N + 1 + N_burn_in, **kwargs)
+            U = self.rng.uniform(0, 1, N + 1 + N_burn_in)
+            for i in range(N + N_burn_in):
+                if U[i] > X[i] / X[i + 1]:
+                    X[i + 1] = X[i]
+            return X[N_burn_in + 1:]
+        raise ValueError(f"Unknown sampling option: {option}.")
+
     
     def function_expectation(self, theta: Callable, N=100, option='integrated_tail', theta_diff=None, **kwargs) -> np.ndarray[float]:
         if option == 'integrated_tail':
