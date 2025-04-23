@@ -23,4 +23,4 @@ def test_unsizebiased_mcmc_sampling():
     x = 1
     x1 = S.laplace_transform(x)
     x2 = (np.mean(np.exp(-x*s)))
-    assert np.isclose(x1, x2, rtol=0.05), f"Expected {x1} to be close to {x2}"
+    assert np.isclose(x2, x1, atol=0.0, rtol=0.005), f"Expected {x1} to be close to {x2}"

@@ -4,7 +4,7 @@ import numpy as np
 from scipy.special import gamma
 from scipy.integrate import quad
 
-from branching_processes_simulation.random_variable.a import A
+from branching_processes_simulation.random_variable.vau import Vau
 from branching_processes_simulation.random_variable.constant import Constant
 from branching_processes_simulation.random_variable.positive_stable import PositiveStable
 from branching_processes_simulation.random_variable.random_variable import RandomVariable
@@ -18,7 +18,7 @@ class UnsizebiasedPositiveStable(RandomVariable):
             return Constant(d)
         return super().__new__(cls)
     
-    _a : Dict[float, A] = {}
+    _a : Dict[float, Vau] = {}
     
     # alpha < 1
     def __init__(self, alpha: float, d: float=1) -> None:
@@ -28,7 +28,7 @@ class UnsizebiasedPositiveStable(RandomVariable):
 
         self._stable = PositiveStable(alpha, d)
         if alpha not in self._a:
-            self._a[alpha] = A(alpha)
+            self._a[alpha] = Vau(alpha)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return self.laplace_transform(- 1j * t)

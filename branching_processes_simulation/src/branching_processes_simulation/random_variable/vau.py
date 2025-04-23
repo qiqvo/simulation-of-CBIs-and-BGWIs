@@ -7,7 +7,7 @@ from branching_processes_simulation.random_variable.positive_stable import Posit
 from branching_processes_simulation.random_variable.random_variable import RandomVariable
 from branching_processes_simulation.utils import parallel_integrate_upper_limits
 
-class A(RandomVariable):
+class Vau(RandomVariable):
     _interval_a = 0
     _interval_b = np.pi
 

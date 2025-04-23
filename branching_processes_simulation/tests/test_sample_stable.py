@@ -29,5 +29,5 @@ def test_sample_stable():
 
     print(x0, x2, x3, sep='\n')
     # assert False
-    assert np.isclose(x2, x0, rtol=0.01), f"Expected {x2} to be close to {x0}."
-    assert np.isclose(x3, x0, rtol=0.01), f"Expected {x3} to be close to {x0}."
+    assert np.isclose(x2, x0, atol=0.0, rtol=0.001), f"Expected {x2} to be close to {x0}."
+    assert np.isclose(x3, x0, atol=0.0, rtol=0.001), f"Expected {x3} to be close to {x0}."

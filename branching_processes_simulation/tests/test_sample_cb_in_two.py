@@ -27,6 +27,6 @@ def test_sample_cb_in_two():
     x3 = (np.mean(np.exp(-x*s3)))
     x4 = (np.mean(np.exp(-x*s4)))
 
-    assert np.isclose(x2, x0, rtol=0.005), f"Expected {x2} to be close to {x0}"
-    assert np.isclose(x3, x0, rtol=0.005), f"Expected {x3} to be close to {x0}"
-    assert np.isclose(x4, x0, rtol=0.005), f"Expected {x2} to be close to {x0}"
+    assert np.isclose(x2, x0, atol=0.0, rtol=0.005), f"Expected {x2} to be close to {x0}"
+    assert np.isclose(x3, x0, atol=0.0, rtol=0.005), f"Expected {x3} to be close to {x0}"
+    assert np.isclose(x4, x0, atol=0.0, rtol=0.005), f"Expected {x2} to be close to {x0}"

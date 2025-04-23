@@ -24,7 +24,7 @@ def test_sample_positive_stable():
     x3 = np.real(np.mean(np.exp(-x*s3)))
 
     print(x0, x1, x2, x3, sep='\n')
-    eps = 0.01
-    assert np.isclose(x1, x0, rtol=eps), f"Expected {x1} to be close to {x0}."
-    assert np.isclose(x2, x0, rtol=eps), f"Expected {x2} to be close to {x0}."
-    assert np.isclose(x3, x0, rtol=eps), f"Expected {x3} to be close to {x0}."
+    eps = 0.005
+    assert np.isclose(x1, x0, atol=0.0, rtol=eps), f"Expected {x1} to be close to {x0}."
+    assert np.isclose(x2, x0, atol=0.0, rtol=eps), f"Expected {x2} to be close to {x0}."
+    assert np.isclose(x3, x0, atol=0.0, rtol=eps), f"Expected {x3} to be close to {x0}."
