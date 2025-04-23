@@ -12,7 +12,7 @@ class StableCB(CriticalCB):
         super().__init__(lambda t: c * t**(1 + alpha))
         self.alpha = alpha
         self.c = c
-        self._xi = Tau(alpha)
+        self._tau = Tau(alpha)
 
     def characteristic_function(self, t: np.complex64, time: np.float64, z: np.float64) -> np.complex64:
         return self.laplace_transform(-1j * t, time, z)
@@ -31,15 +31,17 @@ class StableCB(CriticalCB):
         k = (self.alpha * self.c * time)**(1 / self.alpha)
         m = len(z)
         S = np.zeros((m, N), np.float64)
-        for i in range(len(z)):
-            if z[i] == 0:
-                continue
+        
+        # if z[i] == 0:
+        #     continue
+        s = self.rng.poisson(np.array(z) / k, size=(N, m)) # (N, m)
+        l = np.sum(s)
+        if l == 0:
+            return S
 
-            s = self.rng.poisson(z[i] / k, size=N)
-            X = self._xi.sample(np.sum(s), **kwargs) * k
-            b = np.cumulative_sum(s[s>0][:-1], include_initial=True)
-            S[i, s > 0] = np.add.reduceat(X, b)
-            
-            # for i in range(N):
-            #     s[i] = np.sum(self._xi.sample(s[i], **kwargs)) * k
+        X = self._tau.sample(l, **kwargs) * k
+        b = np.cumulative_sum(s[s>0][:-1], include_initial=True)
+        S.T[s > 0] = np.add.reduceat(X, b)
+        
         return S
+    
