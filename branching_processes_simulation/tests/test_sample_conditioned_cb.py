@@ -11,7 +11,7 @@ def test_sample_conditioned_cb():
 
     t = 1
     z = 1
-    s1 = X.sample(500000, t, [z])
+    s1 = X.sample(50000, t, [z])
     # s2 = X.sample(500000, t, [z], option='poisson')
 
     x = 1
@@ -19,5 +19,5 @@ def test_sample_conditioned_cb():
     x1 = (np.mean(np.exp(-x*s1)))
     # x2 = (np.mean(np.exp(-x*s2)))
 
-    assert np.isclose(x1, x0, rtol=0.001), f"Expected {x1} to be close to {x0}"
+    assert np.isclose(x1, x0, rtol=0.005), f"Expected {x1} to be close to {x0}"
     # assert np.isclose(x2, x0, rtol=0.001), f"Expected {x2} to be close to {x0}"

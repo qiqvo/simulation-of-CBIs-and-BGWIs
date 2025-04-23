@@ -28,7 +28,8 @@ def test_sample_cbi_in_two():
     s3 = X.sample(N, t, [z])
     x3 = (np.mean(np.exp(-x*s3)))
     assert np.isclose(x3, x0, rtol=0.005), f"Expected {x3} to be close to {x0}"
-
-    s4 = X.sample_profile(N, t, z, t_per_1=2)[:, -1]
+    
+    times, s4 = X.sample_profile(N, t, z, t_per_1=2)
+    s4 = s4[:, -1]
     x4 = (np.mean(np.exp(-x*s4)))
     assert np.isclose(x4, x0, rtol=0.005), f"Expected {x2} to be close to {x0}"

@@ -34,7 +34,7 @@ class RandomProcess(IRandom):
     def _get_profile_times(self, time, **kwargs):
         return None
 
-    ## Returns a sample in a shape (N, len(times)), len(times) ~ t_per_1 * time
+    ## Returns times and a sample in a shape (N, len(times)), len(times) ~ t_per_1 * time
     def sample_profile(self, N: int, time: float, z: float, **kwargs) -> np.ndarray[int]:
         times = self._get_profile_times(time, **kwargs)
         m = len(times)
@@ -45,4 +45,4 @@ class RandomProcess(IRandom):
             dt = times[i]
             profile[:, i] = self.sample(1, dt, profile[:, i - 1], **kwargs)[:, 0]
 
-        return profile
+        return times, profile
