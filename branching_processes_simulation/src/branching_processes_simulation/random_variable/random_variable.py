@@ -117,7 +117,7 @@ class RandomVariable(IRandom):
     def sample_from_cdf(self, N: int, pdf_available=False, 
                         approximation='exact',
                         **kwargs) -> np.ndarray[float]:
-        if self._table is None or (self._table and len(self._table) < 2 * N and N < 1e6):
+        if self._table is None or (self._table and len(self._table[0]) < 2 * N):
             self.precompute_cdf_table(int(min(N, 1e4)), **kwargs)
     
         if approximation == 'exact':

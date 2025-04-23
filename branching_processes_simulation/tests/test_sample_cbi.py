@@ -7,7 +7,7 @@ from branching_processes_simulation.random_process.stable_cbi import StableCBI
 def test_sample_cbi():
     alpha = 0.6
     c = 1
-    d = 1
+    d = 0.3
     X = StableCBI(alpha, c, d)
 
     t = 1

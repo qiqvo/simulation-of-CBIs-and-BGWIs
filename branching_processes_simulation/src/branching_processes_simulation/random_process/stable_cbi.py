@@ -37,6 +37,6 @@ class StableCBI(CriticalCBI):
             return 2 * self.c * time
 
     def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[float]]:
-        s = self._cb.sample(N, time, z, **kwargs)
-        s = s + self._linnik.sample(N) * (self.alpha * self.c * time)**(1 / self.alpha)
+        s = self._cb.sample(N, time, z, **kwargs) # (len(z), N) 
+        s += self._linnik.sample(len(z) * N).reshape(len(z), N) * (self.alpha * self.c * time)**(1 / self.alpha)
         return s

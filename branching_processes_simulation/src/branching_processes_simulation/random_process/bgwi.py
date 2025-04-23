@@ -1,4 +1,4 @@
-import typing
+from typing import List
 import numpy as np
 
 # from branching_processes_simulation.discrete_space_process.genealogy.node import Node
