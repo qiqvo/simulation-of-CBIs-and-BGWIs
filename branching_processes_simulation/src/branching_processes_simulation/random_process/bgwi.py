@@ -48,14 +48,14 @@ class BGWI(BGW):
         
         return res
 
-    def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[float]]:
-    # def sample_profile(self, time: int, z: int) -> np.ndarray[int]:
-        profile = np.zeros((time, time), int)
-        immigrants = self.get_immigration_sample(time)
-        profile[0, :] = super().sample_profile(time, z + immigrants[0])
-        for i in range(1, time):
-            profile[i, i:] = super().sample_profile(time-i, immigrants[i])
-        return profile
+    # def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[float]]:
+    # # def sample_profile(self, time: int, z: int) -> np.ndarray[int]:
+    #     profile = np.zeros((time, time), int)
+    #     immigrants = self.get_immigration_sample(time)
+    #     profile[0, :] = super().sample_profile(time, z + immigrants[0])
+    #     for i in range(1, time):
+    #         profile[i, i:] = super().sample_profile(time-i, immigrants[i])
+    #     return profile
 
     # def sample_profile_from_genealogy(self, time: int, root: Node) -> np.ndarray[int]:
     #     profile = np.zeros(time, int)
