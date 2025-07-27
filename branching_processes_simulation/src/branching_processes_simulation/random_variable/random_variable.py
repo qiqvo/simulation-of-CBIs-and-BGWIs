@@ -1,7 +1,7 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from typing import Callable
 import numpy as np
-from scipy.optimize import fsolve, root_scalar
+from scipy.optimize import root_scalar
 from concurrent.futures import ThreadPoolExecutor
 from scipy.integrate import quad
 
@@ -26,7 +26,7 @@ class RandomVariable(IRandom):
             )[0]
             return res
         except Exception as e:
-            raise NotImplementedError()
+            raise NotImplementedError(str(e))
 
     @abstractmethod
     def laplace_transform(self, t: np.float64) -> np.float64:
@@ -51,7 +51,7 @@ class RandomVariable(IRandom):
             res = quad(lambda x: x * self.pdf(x), self._interval_a, self._interval_b)[0]
             return res
         except Exception as e:
-            raise NotImplementedError()
+            raise NotImplementedError(str(e))
 
     @abstractmethod
     def variance(self) -> np.float64:
@@ -62,7 +62,7 @@ class RandomVariable(IRandom):
             res -= self.mean() ** 2
             return res
         except Exception as e:
-            raise NotImplementedError()
+            raise NotImplementedError(str(e))
 
     @abstractmethod
     def sample(self, N: int, **kwargs) -> np.ndarray[float]:

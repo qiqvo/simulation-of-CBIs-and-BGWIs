@@ -1,4 +1,3 @@
-from typing import Callable
 import numpy as np
 from scipy.special import gamma
 from scipy.stats import poisson

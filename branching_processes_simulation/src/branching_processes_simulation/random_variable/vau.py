@@ -1,6 +1,5 @@
 from collections.abc import Iterable
 import numpy as np
-from scipy.special import gamma
 from scipy.integrate import quad
 
 from branching_processes_simulation.random_variable.positive_stable import (

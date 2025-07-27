@@ -1,12 +1,7 @@
-from typing import Callable, List
 import numpy as np
-from scipy.stats import poisson
 
 from branching_processes_simulation.random_process.stable_cbi import StableCBI
 from branching_processes_simulation.random_variable.tau import Tau
-from branching_processes_simulation.random_variable.zero_truncated_poisson import (
-    ZeroTruncatedPoisson,
-)
 
 
 ## CB conditioned to live (forever) is a CBI with d = c * (1 + alpha)

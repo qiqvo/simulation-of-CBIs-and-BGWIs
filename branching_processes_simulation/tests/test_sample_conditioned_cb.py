@@ -1,4 +1,3 @@
-from matplotlib import pyplot as plt
 import numpy as np
 
 from branching_processes_simulation.random_process.conditioned_stable_cb import (

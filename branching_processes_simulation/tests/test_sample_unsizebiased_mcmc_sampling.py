@@ -1,9 +1,4 @@
-from matplotlib import pyplot as plt
 import numpy as np
-import time
-
-from scipy.integrate import quad
-from scipy.special import gamma
 
 from branching_processes_simulation.random_variable.unsizebiased_positive_stable import (
     UnsizebiasedPositiveStable,
@@ -17,8 +12,6 @@ def test_unsizebiased_mcmc_sampling():
     s = S.sample(500000, option="mcmc", N_burn_in=30000)
     # plt.hist(s, bins=100)
     # plt.show()
-
-    C = S.mean()
 
     print(np.mean(s), S.mean())
     print(np.std(s))

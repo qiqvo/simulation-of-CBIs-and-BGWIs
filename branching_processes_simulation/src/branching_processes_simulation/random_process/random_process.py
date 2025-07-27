@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
-from typing import Callable, List
+from abc import abstractmethod
+from typing import List
 import numpy as np
 
 from branching_processes_simulation.i_random import IRandom

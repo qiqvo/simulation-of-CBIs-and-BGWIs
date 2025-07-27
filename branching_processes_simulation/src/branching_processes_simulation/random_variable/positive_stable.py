@@ -1,6 +1,4 @@
-from typing import Any, Callable
 import numpy as np
-import scipy
 
 from branching_processes_simulation.random_variable.constant import Constant
 from branching_processes_simulation.random_variable.stable import Stable

@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from typing import Callable, List
 import numpy as np
 
@@ -6,7 +5,6 @@ from branching_processes_simulation.random_process.cb import CriticalCB
 from branching_processes_simulation.random_process.continuous_time_process import (
     ContinuousTimeRandomProcess,
 )
-from branching_processes_simulation.random_process.random_process import RandomProcess
 
 
 class CriticalCBI(ContinuousTimeRandomProcess):

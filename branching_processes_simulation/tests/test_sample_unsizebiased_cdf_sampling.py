@@ -13,8 +13,6 @@ def test_unsizebiased_cdf_sampling():
     # plt.hist(s, bins=100)
     # plt.show()
 
-    C = S.mean()
-
     print(np.mean(s), S.mean())
     print(np.std(s))
 

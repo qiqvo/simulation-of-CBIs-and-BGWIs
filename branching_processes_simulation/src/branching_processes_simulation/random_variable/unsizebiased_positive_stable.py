@@ -1,5 +1,4 @@
-from collections.abc import Iterable
-from typing import Any, Callable, Dict
+from typing import Dict
 import numpy as np
 from scipy.special import gamma
 from scipy.integrate import quad

@@ -1,9 +1,5 @@
-from matplotlib import pyplot as plt
 import numpy as np
-import time
 
-from scipy.integrate import quad
-from scipy.special import gamma
 
 from branching_processes_simulation.random_variable.symmetric_stable import (
     SymmetricStable,

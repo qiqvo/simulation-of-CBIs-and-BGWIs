@@ -1,14 +1,7 @@
-from matplotlib import pyplot as plt
 import numpy as np
-import time
 
-from scipy.integrate import quad
-from scipy.special import gamma
 
 from branching_processes_simulation.random_variable.linnik import Linnik
-from branching_processes_simulation.random_variable.positive_stable import (
-    PositiveStable,
-)
 
 
 def test_linnik():

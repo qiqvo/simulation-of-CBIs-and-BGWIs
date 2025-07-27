@@ -1,6 +1,5 @@
-from typing import Callable, List
+from typing import List
 import numpy as np
-from scipy.stats import poisson
 
 from branching_processes_simulation.random_process.cb import CriticalCB
 from branching_processes_simulation.random_variable.tau import Tau
@@ -42,17 +41,15 @@ class StableCB(CriticalCB):
     ) -> np.ndarray[np.ndarray[float]]:
         k = (self.alpha * self.c * time) ** (1 / self.alpha)
         m = len(z)
-        S = np.zeros((m, N), np.float64)
 
         # if z[i] == 0:
         #     continue
         s = self.rng.poisson(np.array(z) / k, size=(N, m))  # (N, m)
-        l = np.sum(s)
-        if l == 0:
-            return S
+        if (np.sum(s)) == 0:
+            return np.zeros((m, N), np.float64)
 
-        X = self._tau.sample(l, **kwargs) * k
+        X = self._tau.sample(np.sum(s), **kwargs) * k
         b = np.cumulative_sum(s[s > 0][:-1], include_initial=True)
-        S.T[s > 0] = np.add.reduceat(X, b)
+        (np.zeros((m, N), np.float64)).T[s > 0] = np.add.reduceat(X, b)
 
-        return S
+        return np.zeros((m, N), np.float64)
