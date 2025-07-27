@@ -1,8 +1,9 @@
-from abc import ABC, abstractmethod
 from typing import Callable
 import numpy as np
 
-from branching_processes_simulation.random_variable.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.random_variable import (
+    RandomVariable,
+)
 
 
 class Constant(RandomVariable):
@@ -23,7 +24,7 @@ class Constant(RandomVariable):
 
     def cdf(self, x: np.float64) -> np.float64:
         return 1 if x >= self._const else 0
-    
+
     def mean(self) -> np.float64:
         return self._const
 
@@ -35,9 +36,13 @@ class Constant(RandomVariable):
 
     def sample_function(self, N: int, theta: Callable, **kwargs) -> np.ndarray[float]:
         return np.ones((N)) * theta(self._const)
-    
-    def function_expectation(self, theta: Callable, N=100, **kwargs) -> np.ndarray[float]:
+
+    def function_expectation(
+        self, theta: Callable, N=100, **kwargs
+    ) -> np.ndarray[float]:
         return theta(self._const)
 
-    def sample_from_cdf(self, N: int, pdf_available=False, **kwargs) -> np.ndarray[float]:
+    def sample_from_cdf(
+        self, N: int, pdf_available=False, **kwargs
+    ) -> np.ndarray[float]:
         return self.sample(N)

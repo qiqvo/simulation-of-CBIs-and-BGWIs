@@ -3,5 +3,5 @@ from branching_processes_simulation.random_process.random_process import RandomP
 
 
 class DiscreteTimeRandomProcess(RandomProcess):
-    def _get_profile_times(self, time:int, **kwargs):
+    def _get_profile_times(self, time: int, **kwargs):
         return np.arange(0, time + 1, 1)

@@ -1,7 +1,9 @@
 from typing import Callable
 import numpy as np
 
-from branching_processes_simulation.random_variable.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.random_variable import (
+    RandomVariable,
+)
 
 
 class ImmigrationSL(RandomVariable):
@@ -12,7 +14,7 @@ class ImmigrationSL(RandomVariable):
         self.k = k
 
     def generating_function(self, s: np.complex64) -> np.complex64:
-        return 1 - self.d * (1 - s)**(self.alpha) * self.k(1 - s)
+        return 1 - self.d * (1 - s) ** (self.alpha) * self.k(1 - s)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return self.generating_function(np.exp(1j * t))
@@ -25,7 +27,7 @@ class ImmigrationSL(RandomVariable):
 
     def cdf(self, x: np.float64) -> np.float64:
         return None
-    
+
     def inverse_cdf(self, x: np.float64) -> np.float64:
         return None
 
@@ -36,7 +38,7 @@ class ImmigrationSL(RandomVariable):
             return self.d * self.k(0)
 
     def variance(self) -> np.float64:
-        return 
+        return
 
     def sample(self, N: int) -> np.ndarray[float]:
         return None

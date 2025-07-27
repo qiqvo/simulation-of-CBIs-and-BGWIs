@@ -1,6 +1,9 @@
 import numpy as np
 
-from branching_processes_simulation.random_variable.immigration_sl import ImmigrationSL, RandomVariable
+from branching_processes_simulation.random_variable.immigration_sl import (
+    ImmigrationSL,
+    RandomVariable,
+)
 
 
 class ReproductionSL(RandomVariable):
@@ -14,7 +17,7 @@ class ReproductionSL(RandomVariable):
         self.l_prime = l_prime
 
     def generating_function(self, s: np.complex64) -> np.complex64:
-        return s + self.c * (1 - s)**(1 + self.alpha) * self.l(1 - s)
+        return s + self.c * (1 - s) ** (1 + self.alpha) * self.l(1 - s)
 
     def characteristic_function(self, t: np.complex64) -> np.complex64:
         return self.generating_function(np.exp(1j * t))
@@ -27,9 +30,9 @@ class ReproductionSL(RandomVariable):
 
     def cdf(self, x: np.float64) -> np.float64:
         raise NotImplementedError()
-    
+
     def mean(self) -> np.float64:
-        return 1 
+        return 1
 
     # TODO: check
     def variance(self) -> np.float64:
@@ -37,7 +40,7 @@ class ReproductionSL(RandomVariable):
             return np.infty
         else:
             return 2 * self.c * self.l(0)
-    
+
     def _create_immigration(self):
         if self.l_prime is None:
             eps = 0.001

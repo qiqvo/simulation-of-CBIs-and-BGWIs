@@ -1,5 +1,6 @@
-
-from branching_processes_simulation.random_variable.immigration_exp import ImmigrationExp
+from branching_processes_simulation.random_variable.immigration_exp import (
+    ImmigrationExp,
+)
 from branching_processes_simulation.random_variable.reproduction import ReproductionSL
 
 
