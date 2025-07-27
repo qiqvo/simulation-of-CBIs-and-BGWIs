@@ -1,7 +1,9 @@
 import numpy as np
 
 from branching_processes_simulation.random_variable.immigration_sl import ImmigrationSL
-from branching_processes_simulation.random_variable.positive_stable import PositiveStable
+from branching_processes_simulation.random_variable.positive_stable import (
+    PositiveStable,
+)
 
 
 class ImmigrationExp(ImmigrationSL):

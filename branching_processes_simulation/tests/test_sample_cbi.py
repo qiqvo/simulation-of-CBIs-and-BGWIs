@@ -16,6 +16,8 @@ def test_sample_cbi():
 
     x = 1
     x0 = X.laplace_transform(x, t, z)
-    x1 = (np.mean(np.exp(-x*s1)))
+    x1 = np.mean(np.exp(-x * s1))
 
-    assert np.isclose(x1, x0, atol=0.0, rtol=0.005), f"Expected {x1} to be close to {x0}"
+    assert np.isclose(
+        x1, x0, atol=0.0, rtol=0.005
+    ), f"Expected {x1} to be close to {x0}"

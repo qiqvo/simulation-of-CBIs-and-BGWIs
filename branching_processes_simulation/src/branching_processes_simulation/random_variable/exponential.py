@@ -1,8 +1,9 @@
-
 from typing import Callable
 import numpy as np
 import scipy
-from branching_processes_simulation.random_variable.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.random_variable import (
+    RandomVariable,
+)
 
 
 class Exponential(RandomVariable):
@@ -27,16 +28,23 @@ class Exponential(RandomVariable):
         return 1 - np.exp(-self.rate * x)
 
     def mean(self) -> np.float64:
-        return 1/self.rate
+        return 1 / self.rate
 
     def variance(self) -> np.float64:
-        return 1/self.rate**2
+        return 1 / self.rate**2
 
     def sample(self, N: int) -> np.ndarray[float]:
         return self._rv(1 / self.rate, N)
 
-    def laplace_transform_kth_derivative_at_x(self, k: int, t: np.float64) -> np.float64:
+    def laplace_transform_kth_derivative_at_x(
+        self, k: int, t: np.float64
+    ) -> np.float64:
         return self.laplace_transform_kth_derivative(k)(t)
 
     def laplace_transform_kth_derivative(self, k: int) -> Callable:
-        return lambda x: (-1)**k * scipy.special.factorial(k) * (1 + x / self.rate)**(-k-1) * (self.rate)**(-k)
+        return (
+            lambda x: (-1) ** k
+            * scipy.special.factorial(k)
+            * (1 + x / self.rate) ** (-k - 1)
+            * (self.rate) ** (-k)
+        )

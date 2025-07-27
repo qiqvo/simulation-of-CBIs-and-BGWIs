@@ -2,7 +2,9 @@ from typing import Callable
 import numpy as np
 from scipy.special import gamma
 
-from branching_processes_simulation.random_variable.random_variable import RandomVariable
+from branching_processes_simulation.random_variable.random_variable import (
+    RandomVariable,
+)
 
 
 class Poisson(RandomVariable):
@@ -19,13 +21,13 @@ class Poisson(RandomVariable):
 
     def laplace_transform(self, t: np.float64) -> np.float64:
         return np.exp(self.rate * (np.exp(-t) - 1))
-    
+
     def generating_function(self, s: np.complex64) -> np.complex64:
         return np.exp(self.rate * (s - 1))
 
     def pdf(self, x: np.float64) -> np.float64:
         return self.rate**x * np.exp(-self.rate) / gamma(x + 1)
-    
+
     def cdf(self, x: np.float64) -> np.float64:
         raise NotImplementedError()
 

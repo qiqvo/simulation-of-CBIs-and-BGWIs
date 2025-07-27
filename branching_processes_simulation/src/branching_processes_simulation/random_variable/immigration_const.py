@@ -32,5 +32,5 @@ class ImmigrationConst(ImmigrationSL):
         #         counter += 1
         #         s[i] *= bernoulli.rvs(1 - self.alpha / counter)
         #     s[i] = counter
-        
+
         return s

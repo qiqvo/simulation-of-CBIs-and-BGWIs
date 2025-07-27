@@ -10,11 +10,15 @@ class RandomProcess(IRandom):
         pass
 
     @abstractmethod
-    def characteristic_function(self, t: np.complex64, time: float, z: np.float64) -> np.complex64:
+    def characteristic_function(
+        self, t: np.complex64, time: float, z: np.float64
+    ) -> np.complex64:
         return None
 
     @abstractmethod
-    def laplace_transform(self, t: np.float64, time: float, z: np.float64) -> np.float64:
+    def laplace_transform(
+        self, t: np.float64, time: float, z: np.float64
+    ) -> np.float64:
         return None
 
     @abstractmethod
@@ -25,9 +29,11 @@ class RandomProcess(IRandom):
     def variance(self, time: float, z: np.float64) -> np.float64:
         return None
 
-    ## Returns a sample in a shape (len(z), N) 
+    ## Returns a sample in a shape (len(z), N)
     @abstractmethod
-    def sample(self, N: int, time: np.float64, z: List[np.float64], **kwargs) -> np.ndarray[np.ndarray[np.float64]]:
+    def sample(
+        self, N: int, time: np.float64, z: List[np.float64], **kwargs
+    ) -> np.ndarray[np.ndarray[np.float64]]:
         return None
 
     @abstractmethod
@@ -35,7 +41,9 @@ class RandomProcess(IRandom):
         return None
 
     ## Returns times and a sample in a shape (N, len(times)), len(times) ~ t_per_1 * time
-    def sample_profile(self, N: int, time: float, z: float, **kwargs) -> np.ndarray[int]:
+    def sample_profile(
+        self, N: int, time: float, z: float, **kwargs
+    ) -> np.ndarray[int]:
         times = self._get_profile_times(time, **kwargs)
         m = len(times)
 

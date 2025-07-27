@@ -4,7 +4,10 @@ from scipy.stats import poisson
 
 from branching_processes_simulation.random_process.stable_cbi import StableCBI
 from branching_processes_simulation.random_variable.tau import Tau
-from branching_processes_simulation.random_variable.zero_truncated_poisson import ZeroTruncatedPoisson
+from branching_processes_simulation.random_variable.zero_truncated_poisson import (
+    ZeroTruncatedPoisson,
+)
+
 
 ## CB conditioned to live (forever) is a CBI with d = c * (1 + alpha)
 class ConditionedStableCB(StableCBI):
@@ -12,7 +15,7 @@ class ConditionedStableCB(StableCBI):
         assert 0 < alpha <= 1 and c > 0
         super().__init__(alpha, c, c * (1 + alpha))
         self._xi = Tau(alpha)
-        
+
     # def sample(self, N: int, time: np.float64, z: List[np.float64], option='poisson', **kwargs) -> np.ndarray[np.ndarray[float]]:
     #     if option == 'poisson':
     #         k = (self.alpha * self.c * time)**(1 / self.alpha)
@@ -29,5 +32,5 @@ class ConditionedStableCB(StableCBI):
     #         return S
     #     if option=='CBI':
     #         return super().sample(N, time, z, **kwargs)
-        
+
     #     raise ValueError(f"Unknown option: {option}")
