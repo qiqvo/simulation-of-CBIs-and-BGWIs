@@ -69,7 +69,9 @@ class RandomProcess(IRandom):
         plt.xlabel("Time")
         plt.ylabel("Value")
 
-    def animate_profile(self, N: int, time: float, z: float, **kwargs) -> None:
+    def animate_profile(
+        self, N: int, time: float, z: float, folder="./images", **kwargs
+    ) -> None:
         import matplotlib.pyplot as plt
         from matplotlib.animation import FuncAnimation, PillowWriter
 
@@ -98,5 +100,9 @@ class RandomProcess(IRandom):
 
         ani = FuncAnimation(fig, update, frames=len(times), init_func=init, blit=False)
         fps = kwargs.get("fps", kwargs.get("t_per_1", 5))
-        ani.save(f"profile_animation_{self}.gif", writer=PillowWriter(fps=fps), dpi=350)
+        ani.save(
+            folder + f"/profile_animation_{self}.gif",
+            writer=PillowWriter(fps=fps),
+            dpi=350,
+        )
         return fig, ax, ani
