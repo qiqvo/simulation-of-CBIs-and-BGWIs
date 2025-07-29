@@ -11,7 +11,9 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "args": "${command:pickArgs}",
-            // "env": {"PYTHONPATH": ".."},
+            "env": {
+                "PYTHONPATH": "./branching_processes_simulation/src;${env:PYTHONPATH}",
+            },
         }
     ]
 }

@@ -1,7 +1,7 @@
 from typing import List
 import numpy as np
 
-from branching_processes_simulation.random_process.cbi import CriticalCBI
+from branching_processes_simulation.random_process.critical_cbi import CriticalCBI
 from branching_processes_simulation.random_process.stable_cb import StableCB
 from branching_processes_simulation.random_variable.linnik import Linnik
 
@@ -17,6 +17,9 @@ class StableCBI(CriticalCBI):
         self.delta = d / (alpha * c)
         self._cb = StableCB(alpha, c)
         self._linnik = Linnik(self.alpha, self.delta)
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(alpha={self.alpha}, c={self.c}, d={self.d})"
 
     def characteristic_function(
         self, t: np.complex64, time: np.float64, z: np.float64

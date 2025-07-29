@@ -2,9 +2,16 @@
     "python.analysis.extraPaths": [
         "./branching_processes_simulation/src"
     ],
+    "python.autoComplete.extraPaths": [
+        "./branching_processes_simulation/src"
+    ],
     "python.testing.pytestArgs": [
         "branching_processes_simulation/tests"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+    "terminal.integrated.env.osx": {
+        "PYTHONPATH": "./branching_processes_simulation/src:${env:PYTHONPATH}",
+        "PATH": "./branching_processes_simulation/src:${env:PATH}"
+    }
 }

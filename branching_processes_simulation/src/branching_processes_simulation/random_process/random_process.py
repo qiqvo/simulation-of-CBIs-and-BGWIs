@@ -9,6 +9,9 @@ class RandomProcess(IRandom):
     def __init__(self) -> None:
         pass
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}"
+
     @abstractmethod
     def characteristic_function(
         self, t: np.complex64, time: float, z: np.float64
@@ -54,3 +57,46 @@ class RandomProcess(IRandom):
             profile[:, i] = self.sample(1, dt, profile[:, i - 1], **kwargs)[:, 0]
 
         return times, profile
+
+    def plot_profile(self, N: int, time: float, z: float, **kwargs) -> None:
+        import matplotlib.pyplot as plt
+
+        times, profile = self.sample_profile(N, time, z, **kwargs)
+        for i in range(N):
+            plt.plot(times, profile[i], label=f"Sample {i + 1}")
+
+        plt.title(f"Profile of {self}")
+        plt.xlabel("Time")
+        plt.ylabel("Value")
+
+    def animate_profile(self, N: int, time: float, z: float, **kwargs) -> None:
+        import matplotlib.pyplot as plt
+        from matplotlib.animation import FuncAnimation, PillowWriter
+
+        times, profile = self.sample_profile(N, time, z, **kwargs)
+
+        fig, ax = plt.subplots()
+        lines = [ax.plot([], [], lw=2)[0] for _ in range(N)]
+        ax.grid()
+        ax.set_title(f"Profile of {self}")
+        ax.set_xlabel("Time")
+        ax.set_ylabel("Value")
+
+        def init():
+            for line in lines:
+                line.set_data([], [])
+            return lines
+
+        def update(frame):
+            for i, line in enumerate(lines):
+                line.set_data(times[:frame], profile[i, :frame])
+
+            ax.relim()
+            ax.autoscale_view()
+
+            return lines
+
+        ani = FuncAnimation(fig, update, frames=len(times), init_func=init, blit=False)
+        fps = kwargs.get("fps", kwargs.get("t_per_1", 5))
+        ani.save(f"profile_animation_{self}.gif", writer=PillowWriter(fps=fps), dpi=350)
+        return fig, ax, ani

@@ -1,7 +1,7 @@
 from typing import List
 import numpy as np
 
-from branching_processes_simulation.random_process.cb import CriticalCB
+from branching_processes_simulation.random_process.critical_cb import CriticalCB
 from branching_processes_simulation.random_variable.tau import Tau
 
 
@@ -13,6 +13,9 @@ class StableCB(CriticalCB):
         self.c = c
         self._tau = Tau(alpha)
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}(alpha={self.alpha}, c={self.c})"
+
     def characteristic_function(
         self, t: np.complex64, time: np.float64, z: np.float64
     ) -> np.complex64:
@@ -21,13 +24,8 @@ class StableCB(CriticalCB):
     def laplace_transform(
         self, t: np.float64, time: float, z: np.float64
     ) -> np.float64:
-        return np.exp(
-            -t
-            * z
-            / np.power(
-                1 + self.alpha * self.c * time * np.abs(t) ** self.alpha, 1 / self.alpha
-            )
-        )
+        s = 1 + self.alpha * self.c * time * np.abs(t) ** self.alpha
+        return np.exp(-t * z / np.power(s, 1 / self.alpha))
 
     def variance(self, time: float, z: np.float64) -> np.float64:
         if self.alpha < 1:
@@ -41,15 +39,17 @@ class StableCB(CriticalCB):
     ) -> np.ndarray[np.ndarray[float]]:
         k = (self.alpha * self.c * time) ** (1 / self.alpha)
         m = len(z)
+        S = np.zeros((m, N), np.float64)
 
         # if z[i] == 0:
         #     continue
         s = self.rng.poisson(np.array(z) / k, size=(N, m))  # (N, m)
-        if (np.sum(s)) == 0:
-            return np.zeros((m, N), np.float64)
+        l = np.sum(s)
+        if l == 0:
+            return S
 
-        X = self._tau.sample(np.sum(s), **kwargs) * k
+        X = self._tau.sample(l, **kwargs) * k
         b = np.cumulative_sum(s[s > 0][:-1], include_initial=True)
-        (np.zeros((m, N), np.float64)).T[s > 0] = np.add.reduceat(X, b)
+        S.T[s > 0] = np.add.reduceat(X, b)
 
-        return np.zeros((m, N), np.float64)
+        return S
